@@ -12,7 +12,7 @@ const inputNombre = document.getElementById('nombre');
 const guardarBtn = document.getElementById('guardar-btn');
 
 // Variables del Cronómetro
-let tiempoRestante = 300; // 5 minutos = 300 segundos
+let tiempoRestante = 180; // 5 minutos = 300 segundos
 let intervaloCronometro;
 
 // --- A. SIMULACIÓN DE CARGA TEMÁTICA ---
