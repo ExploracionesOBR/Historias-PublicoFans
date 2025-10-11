@@ -18,8 +18,8 @@ let intervaloCronometro;
 // --- A. SIMULACIÓN DE CARGA TEMÁTICA ---
 const mensajes = [
     "BIENVENIDO AL PORTAL DE EXPLORACIONES OBR...",
-    "Conectado a la red espectral...",
-    "Revisando el aura fantasmal (Protocolo 404)...",
+    "Conectado a la red Central...",
+    "Revisando el nivel fantasmal (Protocolo 404)...",
     "Purificando el ambiente... (Fallo de integridad - RIESGO ALTO)",
     "Conexión forzada. ¡REGISTRA tu encuentro AHORA!"
 ];
@@ -59,7 +59,7 @@ function actualizarCronometro() {
 
     if (tiempoRestante <= 0) {
         clearInterval(intervaloCronometro);
-        displayCronometro.textContent = "¡ANULACIÓN! ENTIDAD RECLAMÓ TESTIMONIO";
+        displayCronometro.textContent = "¡SIN ÉXITO! 🫠 LAS ENTIDADES RECLAMARON ESTE TESTIMONIO ⚠️";
         displayCronometro.classList.add('timer-expired');
         
         // Elimina el contenido
@@ -70,7 +70,7 @@ function actualizarCronometro() {
         guardarBtn.disabled = true;
         
         // Mensaje de terror
-        alert("El portal se cierra bruscamente. Tu testimonio no fue sellado a tiempo y fue borrado de la realidad.");
+        alert("El portal se cerro bruscamente. Tu testimonio no fue sellado a tiempo y fue borrado de la realidad.");
         
         // Opcional: Recargar la página después de un tiempo
         setTimeout(() => window.location.reload(), 5000); 
@@ -93,7 +93,7 @@ formulario.addEventListener('submit', function(e) {
     
     // 1. Detiene el cronómetro y desactiva el botón
     clearInterval(intervaloCronometro);
-    displayCronometro.textContent = "SELLANDO REGISTRO...";
+    displayCronometro.textContent = "GUARDANDO REGISTRO...";
     guardarBtn.disabled = true;
     
     // 2. Prepara los datos para SheetDB
@@ -116,22 +116,22 @@ formulario.addEventListener('submit', function(e) {
     .then(data => {
         if (data.created) {
             // Éxito
-            displayCronometro.textContent = "TESTIMONIO SELLADO CON ÉXITO";
-            alert("Tu historia ha sido transferida y sellada en el grimorio digital. Gracias por tu contribución.");
+            displayCronometro.textContent = "TESTIMONIO GUARDADO CON ÉXITO";
+            alert("Tu historia ha sido transferida y guardada en un lugar protegido. Gracias por tu contribución.");
             formulario.reset(); 
             // Deja el cronómetro en estado final
         } else {
             // Error de API o de datos
             displayCronometro.textContent = "ERROR DE REGISTRO. INTENTA DE NUEVO";
-            alert("Fallo al guardar. El portal es inestable o la red fantasmal colapsó. Inténtalo de nuevo.");
+            alert("Fallo al guardar. El portal es inestable o el bloqueo fantasmal colapsó. Inténtalo de nuevo.");
             guardarBtn.disabled = false;
             iniciarCronometro(); // Reinicia el tiempo para que el usuario pueda reintentar
         }
     })
     .catch(error => {
-        displayCronometro.textContent = "FALLA EN LA RED FANTASMAL";
+        displayCronometro.textContent = "FALLA EN LA RED ENCRIPTADA";
         console.error('Error:', error);
-        alert("Falla de conexión. Revisa tu internet o la presencia espectral. Intenta de nuevo.");
+        alert("Falla de conexión. Revisa tu internet e intenta nuevamente la limpieza del ambiente. Intenta de nuevo.");
         guardarBtn.disabled = false;
         iniciarCronometro(); // Reinicia el tiempo
     });
