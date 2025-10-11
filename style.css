@@ -137,3 +137,75 @@ label, .instrucciones {
     cursor: not-allowed;
     opacity: 0.5;
 }
+/* --- NUEVA ANIMACIÓN DE BORDE (Efecto de "Aura") --- */
+
+/* Contenedor que simulará el borde con un pseudo-elemento */
+.animated-border-wrapper {
+    position: relative;
+    padding: 2px; /* Espacio para que se vea el borde animado */
+    z-index: 1; /* Asegura que el borde esté detrás del formulario */
+}
+
+/* El pseudo-elemento que crea el efecto de aura/luz */
+.animated-border-wrapper::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: conic-gradient(
+        #ff004c 0deg,   /* Rojo terror */
+        #00ff41 90deg,  /* Verde neón */
+        #ff004c 180deg,
+        #00ff41 270deg,
+        #ff004c 360deg
+    );
+    /* Animación para rotar el gradiente */
+    animation: rotate-border 4s linear infinite;
+    z-index: -1; /* Colócalo detrás del contenido */
+    border-radius: 5px; /* Para coincidir con el diseño */
+}
+
+/* Define la animación de rotación */
+@keyframes rotate-border {
+    to {
+        transform: rotate(360deg);
+    }
+}
+
+/* Ajuste del formulario dentro del wrapper */
+.animated-border-wrapper form {
+    background-color: var(--bg-color); /* Fondo negro para que el gradiente se vea como borde */
+    padding: 20px;
+}
+
+/* Asegura que el formulario y el wrapper tengan buen aspecto */
+#contenedor-formulario .header-glitch {
+    margin-top: 0;
+}
+
+/* Ajustes para la pantalla de carga */
+#pantalla-carga {
+    text-align: center;
+    min-height: 200px;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+}
+
+/* Oculta la simulación de carga hasta que se llame en JS */
+#simulacion-carga {
+    white-space: pre-wrap;
+    font-size: 1.2em;
+    min-height: 25px; /* Para evitar saltos de pantalla */
+    opacity: 0; /* Inicialmente invisible */
+}
+
+/* Clase para hacer visible el texto de la simulación */
+.show-text {
+    opacity: 1 !important;
+    transition: opacity 0.5s;
+    animation: blink 1s step-end infinite;
+}
