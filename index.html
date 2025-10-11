@@ -1,0 +1,37 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>PORTAL OBR: REGISTRO DE EXPLORACIONES</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+    <div class="terminal-container">
+        <div id="simulacion-carga" class="glitch">
+            <span class="line-start">> </span>
+            <span id="carga-texto">Iniciando protocolo OBR...</span>
+        </div>
+
+        <div id="contenedor-formulario" style="display: none;">
+            <h1 class="header-glitch">REGISTRO DE EXPERIENCIA FANTASMAL</h1>
+            
+            <div id="cronometro-display" class="timer-warning">5:00</div>
+            <p class="instrucciones">Escribe rápido, el portal de conexión es inestable. Si el tiempo expira, la entidad reclamará tu testimonio.</p>
+            
+            <form id="formulario-historia">
+                <label for="nombre" class="glitch-label">Nombre del Explorador (Identificador de Alma):</label>
+                <input type="text" id="nombre" name="data[Nombre]" required class="input-terminal"> 
+                
+                <label for="historia" class="glitch-label">Describe tu Encuentro (La Pesadilla):</label>
+                <textarea id="historia" name="data[Historia]" rows="15" required class="input-terminal"></textarea>
+                
+                <button type="submit" id="guardar-btn" class="btn-terminal">GUARDAR HISTORIAL</button>
+            </form>
+        </div>
+    </div>
+
+    <script src="script.js"></script>
+</body>
+</html>
