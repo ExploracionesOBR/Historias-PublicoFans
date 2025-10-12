@@ -1,5 +1,5 @@
 // ** CONFIGURACIÓN CLAVE: REEMPLAZA ESTA URL CON TU API DE SHEETDB **
-const FORM_URL = 'https://sheetdb.io/api/v1/txamjw05ii0f9'; 
+const FORM_URL = 'https://https://sheetdb.io/api/v1/txamjw05ii0f9'; 
 // Elementos del DOM
 const terminalContainer = document.querySelector('.terminal-container'); 
 const tituloCarga = document.getElementById('titulo-carga');
@@ -101,7 +101,7 @@ function iniciarCronometro(segundosIniciales = 180) { // 180 SEGUNDOS (3 MINUTOS
     
     if (guardarBtn) guardarBtn.disabled = false;
 
-    // CORRECCIÓN CLAVE: Llama a actualizarCronometro inmediatamente para iniciar el conteo
+    // Llama a actualizarCronometro inmediatamente para iniciar el conteo
     actualizarCronometro(); 
     intervaloCronometro = setInterval(actualizarCronometro, 1000);
 }
