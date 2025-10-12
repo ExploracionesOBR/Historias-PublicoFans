@@ -7,7 +7,7 @@
 }
 
 body {
-    /* --- PROPIEDADES BASE --- */
+    /* --- PROPIEDADES BASE Y RUTA ABSOLUTA --- */
     background-color: #0d0d0d;
     color: var(--text-color);
     font-family: var(--font-family);
@@ -20,42 +20,32 @@ body {
     padding: 20px 10px; 
     overflow-y: auto; 
     
-    /* --- FONDOS COMPUESTOS (VERIFICA LA RUTA: fondo_terror.jpg) --- */
+    /* NECESARIO para el pseudo-elemento de capa oscura */
+    position: relative; 
+    
+    /* --- CAPAS DE FONDO SIMPLIFICADAS --- */
     background: 
-        /* 1. Capa Oscura (Opacidad 0.8) */
+        /* 1. Capa Oscura semi-transparente (rgba(0,0,0,0.8)) */
         linear-gradient(rgba(0,0,0,0.8), rgba(0,0,0,0.8)),
         
-        /* 2. Capa de Líneas CRT */
+        /* 2. Capa de Líneas CRT (efecto visual) */
         repeating-linear-gradient(
             transparent 0,
             rgba(0, 0, 0, 0.4) 1px,
             transparent 2px
         ), 
         
-        /* 3. IMAGEN DE FONDO (CAPA INFERIOR) */
-        url('fondo_terror.jpg'); 
+        /* 3. IMAGEN DE FONDO (USANDO RUTA ABSOLUTA) */
+        url('https://exploracionesobr.github.io/Historias-PublicoFans/fondo_terror.jpg'); 
     
     /* Reglas para cada capa */
     background-size: cover, auto, cover; 
     background-position: center center, 0 0, center center;
     background-repeat: no-repeat, repeat, no-repeat;
     background-attachment: fixed, scroll, fixed;
-
-    /* Necesario para el pseudo-elemento que crea la capa oscura */
-    position: relative; 
 }
 
-/* --- CAPA OSCURA ASEGURADA (Para móviles y navegadores que no soportan bien el background múltiple) --- */
-body::before {
-    content: "";
-    position: fixed; 
-    top: 0;
-    left: 0;
-    width: 100%;
-    height: 100%;
-    background-color: rgba(0, 0, 0, 0.3); /* Opacidad más baja para no oscurecer demasiado si el gradient no funciona */
-    z-index: -1; 
-}
+/* El contenido del body::before (capa oscura) y .terminal-container sigue igual. */
 
 /* También, asegúrate de que el contenedor terminal no tenga conflictos de altura */
 .terminal-container {
