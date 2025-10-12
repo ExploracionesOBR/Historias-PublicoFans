@@ -7,44 +7,30 @@
 }
 
 body {
-    background-color: var(--bg-color); /* Color de fondo por si la imagen no carga */
+    background-color: black; 
     color: var(--text-color);
     font-family: var(--font-family);
     
     display: flex;
     flex-direction: column; 
     align-items: center;
-    
     min-height: 100vh; 
-    
     margin: 0;
     padding: 20px 10px; 
-    
     overflow-y: auto; 
     
-    /* --- ¡NUEVAS PROPIEDADES PARA LA IMAGEN DE FONDO! --- */
-    background-image: url('fondo_terror.jpg'); /* <-- ¡CAMBIA 'fondo_terror.jpg' POR EL NOMBRE DE TU ARCHIVO! */
-    background-size: cover; /* Hace que la imagen cubra todo el fondo sin perder proporción */
-    background-position: center center; /* Centra la imagen */
-    background-repeat: no-repeat; /* Evita que la imagen se repita si es pequeña */
-    background-attachment: fixed; /* Mantiene la imagen fija al hacer scroll (opcional, puedes quitarlo si quieres que se mueva) */
+    /* --- PRUEBA SIMPLE: Solo la Imagen --- */
     
-    /* Mantenemos el efecto de líneas CRT, pero sobre la imagen de fondo */
-    background: 
-        linear-gradient(rgba(0,0,0,0.6), rgba(0,0,0,0.6)), /* Capa oscura semitransparente sobre la imagen */
-        repeating-linear-gradient(
-            transparent 0,
-            rgba(0, 0, 0, 0.4) 1px,
-            transparent 2px
-        ), 
-        url('fondo_terror.jpg'); /* <-- ¡CAMBIA 'fondo_terror.jpg' AQUÍ TAMBIÉN! */
+    background-image: url('TU_NOMBRE_DE_IMAGEN.jpg'); /* <-- ¡VERIFICA ESTA RUTA! */
+    background-size: cover; 
+    background-position: center center; 
+    background-repeat: no-repeat; 
+    background-attachment: fixed;
     
-    /* Ajusta cómo se aplica el fondo cuando hay múltiples fondos */
-    background-size: cover, auto, cover; 
-    background-position: center center, 0 0, center center;
-    background-repeat: no-repeat, repeat, no-repeat;
-    background-attachment: fixed, scroll, fixed;
+    /* QUITAMOS EL RESTO DE LAS PROPIEDADES DE 'background' COMPUESTAS POR AHORA */
 }
+
+
 /* También, asegúrate de que el contenedor terminal no tenga conflictos de altura */
 .terminal-container {
     width: 100%; 
