@@ -47,15 +47,35 @@ body {
     100% { box-shadow: 0 0 5px var(--text-color), 0 0 0 0 rgba(0, 255, 65, 0.5); }
 }
 
+body {
+    background-color: var(--bg-color);
+    color: var(--text-color);
+    font-family: var(--font-family);
+    margin: 0;
+    padding: 20px 10px; /* Reducir padding horizontal en móvil */
+    display: flex;
+    flex-direction: column; /* Cambiado a columna para que el contenido fluya */
+    align-items: center;
+    min-height: 100vh; /* Permite que el cuerpo crezca */
+    /* REMOVIDO: overflow: hidden; */
+    
+    background: repeating-linear-gradient(
+        transparent 0,
+        rgba(0, 0, 0, 0.4) 1px,
+        transparent 2px
+    ), var(--bg-color);
+}
+
 .terminal-container {
-    width: 90%;
+    width: 100%; /* Ocupar todo el ancho en móvil */
     max-width: 800px;
     border: 2px solid var(--text-color);
-    padding: 30px;
+    padding: 20px 15px; /* Reducir padding interno */
     box-shadow: 0 0 10px var(--text-color);
     background-color: rgba(0, 0, 0, 0.8);
     animation: ghostly-pulse 5s infinite ease-in-out;
-    transition: opacity 1s ease-out; /* Para el efecto de desvanecimiento */
+    transition: opacity 1s ease-out;
+    box-sizing: border-box; /* CLAVE: Asegura que el padding no desborde el ancho de la pantalla */
 }
 
 /* Estilos de la simulación de carga */
@@ -106,6 +126,9 @@ label, .instrucciones {
     animation: blink 2s step-end infinite;
 }
 
+/* Busca el bloque de Formulario */
+/* ... */
+
 .input-terminal {
     width: 100%;
     padding: 10px;
@@ -117,6 +140,14 @@ label, .instrucciones {
     box-sizing: border-box; 
     transition: all 0.2s;
 }
+
+/* Ajuste específico para el área de texto (textarea) */
+textarea.input-terminal {
+    min-height: 250px; /* Reducir de 15 rows a una altura fija menor */
+    height: 250px;
+}
+
+/* ... */
 
 .input-terminal:focus {
     outline: none;
@@ -171,24 +202,26 @@ label, .instrucciones {
 /* --- NUEVAS CLASES PARA EL EFECTO DE APAGADO Y RECONEXIÓN --- */
 
 /* Clase para ocultar el contenido y mostrar un mensaje en el centro */
+/* Clase para ocultar el contenido y mostrar un mensaje en el centro */
 .full-screen-message {
     position: fixed;
     top: 0;
     left: 0;
     width: 100vw;
     height: 100vh;
-    background-color: var(--bg-color); /* Fondo negro */
+    background-color: var(--bg-color); 
     display: flex;
     justify-content: center;
     align-items: center;
-    z-index: 1000; /* Por encima de todo */
-    color: var(--error-color); /* Texto de error */
-    font-size: 2em;
+    z-index: 1000; 
+    color: var(--error-color); 
+    font-size: 1.5em; /* Reducir un poco el tamaño de la fuente para que quepa mejor */
+    padding: 20px; /* Asegurar padding */
     text-align: center;
     animation: blink 0.7s step-end infinite;
-    flex-direction: column; /* Para centrar el botón de reconexión */
+    flex-direction: column; 
+    box-sizing: border-box; 
 }
-
 /* --- NUEVOS KEYFRAMES: EFECTO DE APAGÓN CRT --- */
 
 /* Clase para la animación de apagón (simula una línea que se encoge) */
