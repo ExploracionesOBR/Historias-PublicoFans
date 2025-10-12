@@ -1,7 +1,7 @@
 // ** CONFIGURACIÓN CLAVE: REEMPLAZA ESTA URL CON TU API DE SHEETDB **
 const FORM_URL = 'https://sheetdb.io/api/v1/txamjw05ii0f9'; 
-
 // Elementos del DOM
+const terminalContainer = document.querySelector('.terminal-container'); // ¡Nuevo!
 const tituloCarga = document.getElementById('titulo-carga');
 const cargaTexto = document.getElementById('carga-texto');
 const simulacionCarga = document.getElementById('simulacion-carga');
@@ -16,7 +16,7 @@ const guardarBtn = document.getElementById('guardar-btn');
 // --- NUEVO ELEMENTO: Contenedor para mensajes a pantalla completa ---
 const fullScreenMessageContainer = document.createElement('div');
 fullScreenMessageContainer.id = 'full-screen-overlay';
-fullScreenMessageContainer.style.display = 'none'; // Inicialmente oculto
+fullScreenMessageContainer.style.display = 'none'; 
 document.body.appendChild(fullScreenMessageContainer);
 
 // Variables del Cronómetro
@@ -24,21 +24,36 @@ let intervaloCronometro;
 let tiempoRestanteActual = 0; 
 
 // --- FUNCIONES DE APAGADO/RECONEXIÓN ---
-function showFullScreenMessage(message, showReconnectButton = true) {
-    fullScreenMessageContainer.innerHTML = `<p>${message}</p>`;
-    if (showReconnectButton) {
-        const reconnectBtn = document.createElement('button');
-        reconnectBtn.id = 'reconnect-btn';
-        reconnectBtn.textContent = 'RECONECTAR AL PORTAL';
-        reconnectBtn.onclick = () => window.location.reload();
-        fullScreenMessageContainer.appendChild(reconnectBtn);
-    }
-    fullScreenMessageContainer.classList.add('full-screen-message');
-    fullScreenMessageContainer.style.display = 'flex'; // Usar flex para centrar
+
+/** Muestra la pantalla negra y simula el apagón CRT */
+function initiateShutdown(message, showReconnectButton = true) {
+    // 1. Detiene el cronómetro por seguridad
+    if (intervaloCronometro) clearInterval(intervaloCronometro);
     
-    // Opcional: Animar la salida del contenido principal
-    document.querySelector('.terminal-container').classList.add('screen-shutdown-effect');
+    // 2. Aplica la animación de apagón CRT al contenedor principal
+    terminalContainer.classList.add('screen-shutdown-effect');
+    
+    // 3. Después de que la animación termine (600ms), muestra el mensaje a pantalla completa.
+    setTimeout(() => {
+        fullScreenMessageContainer.innerHTML = `<p>${message}</p>`;
+        
+        if (showReconnectButton) {
+            const reconnectBtn = document.createElement('button');
+            reconnectBtn.id = 'reconnect-btn';
+            reconnectBtn.textContent = 'RECONECTAR AL PORTAL';
+            reconnectBtn.onclick = () => window.location.reload();
+            fullScreenMessageContainer.appendChild(reconnectBtn);
+        }
+        
+        fullScreenMessageContainer.classList.add('full-screen-message');
+        fullScreenMessageContainer.style.display = 'flex';
+        
+        // Esconde completamente el contenedor de la terminal para asegurar que el fondo sea negro puro
+        terminalContainer.style.display = 'none';
+
+    }, 600); 
 }
+
 
 // --- A. SIMULACIÓN DE CARGA TEMÁTICA ---
 const secuencia = [
@@ -54,7 +69,6 @@ function mostrarMensaje(index) {
         setTimeout(() => {
             pantallaCarga.style.display = 'none';
             contenedorFormulario.style.display = 'block';
-            // Inicia el cronómetro directamente en 2 minutos (120 segundos)
             iniciarCronometro(120); 
         }, 1500);
         return;
@@ -85,20 +99,22 @@ function mostrarMensaje(index) {
     }, delay);
 }
 
-// --- B. CRONÓMETRO Y FUNCIÓN DE ELIMINACIÓN CORREGIDA ---
+// --- B. CRONÓMETRO Y FUNCIÓN DE ELIMINACIÓN ---
 
 function actualizarCronometro() {
     if (tiempoRestanteActual <= 0) {
+        // TIEMPO EXCEDIDO: Llama al apagón
         clearInterval(intervaloCronometro);
         displayCronometro.textContent = "¡ERROR 404! LAS ENTIDADES RECLAMARON TU TESTIMONIO.";
         displayCronometro.classList.add('timer-expired');
         
+        // 1. Limpia datos (opcional, por si acaso)
         areaTexto.value = "";
         inputNombre.value = "";
         guardarBtn.disabled = true;
         
-        // Muestra la pantalla negra en lugar de un alert
-        showFullScreenMessage("El portal se cerró. Tu testimonio no fue guardado a tiempo y fue reclamado por los espectros.");
+        // 2. Ejecuta el apagón y muestra el mensaje
+        initiateShutdown("El portal se cerró. Tu testimonio no fue guardado a tiempo y fue reclamado por los espectros.");
         return; 
     }
 
@@ -121,7 +137,6 @@ function iniciarCronometro(segundosIniciales = 120) {
     displayCronometro.classList.remove('timer-expired');
     guardarBtn.disabled = false;
     
-    // Muestra inmediatamente el tiempo correcto (2:00) al iniciar
     const minutos = Math.floor(tiempoRestanteActual / 60);
     const segundos = tiempoRestanteActual % 60;
     displayCronometro.textContent = `${minutos}:${segundos < 10 ? '0' : ''}${segundos}`;
@@ -155,22 +170,23 @@ formulario.addEventListener('submit', function(e) {
     .then(response => response.json())
     .then(data => {
         if (data.created) {
-            displayCronometro.textContent = "TESTIMONIO GUARDADO CON ÉXITO";
-            // Éxito: pantalla negra sin botón de reconexión porque se guardó
-            showFullScreenMessage("Tu historia ha sido transferida y guardada por el equpo de OBR. Gracias por tu contribución.", false); // No mostrar botón
+            // ÉXITO: Llama al apagón
+            formulario.reset(); 
+            initiateShutdown(
+                "TESTIMONIO GUARDADO CON ÉXITO. Tu historia ha sido transferida y guardada por el equpo de OBR. Gracias por tu contribución.", 
+                false
+            ); 
         } else {
-            // Error de API o de datos
-            displayCronometro.textContent = "ERROR DE REGISTRO. INTENTA DE NUEVO";
-            showFullScreenMessage("Fallo al guardar. El portal es inestable o la protección fantasmal colapsó. Inténtalo de nuevo.");
-            // No reinicia el cronómetro, se queda en la pantalla negra
+            // ERROR: Llama al apagón
+            displayCronometro.textContent = "ERROR DE REGISTRO.";
+            initiateShutdown("Fallo al guardar. El portal es inestable o la protección fantasmal colapsó. Inténtalo de nuevo.");
         }
     })
     .catch(error => {
-        // Falla de red
+        // FALLA DE RED: Llama al apagón
         displayCronometro.textContent = "FALLA EN LA RED CREADA";
         console.error('Error:', error);
-        showFullScreenMessage("Falla de conexión. Revisa tu internet o la presencia espectral. Intenta de nuevo.");
-        // No reinicia el cronómetro, se queda en la pantalla negra
+        initiateShutdown("Falla de conexión. Revisa tu internet o la presencia espectral. Intenta de nuevo.");
     });
 });
 
