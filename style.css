@@ -297,3 +297,19 @@ textarea.input-terminal {
     color: var(--error-color);
     box-shadow: 0 0 10px var(--error-color);
 }
+
+/* --- EN style.css --- */
+
+/* HACEMOS EL CONTENEDOR INVISIBLE Y NO CLICKEABLE POR DEFECTO */
+#contenedor-formulario {
+    opacity: 0;
+    pointer-events: none; /* Esto evita que se pueda hacer click mientras está oculto */
+    transition: opacity 1s ease-in-out; /* Opcional: para una aparición suave si el JS lo pide */
+}
+
+/* Y aseguramos que el JS pueda mostrarlo. Si tienes una regla display: none en HTML, quítala. */
+
+#contenedor-formulario[style*="display: block"] {
+    opacity: 1 !important;
+    pointer-events: auto !important;
+}
