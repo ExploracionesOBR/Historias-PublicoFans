@@ -189,10 +189,20 @@ label, .instrucciones {
     flex-direction: column; /* Para centrar el botón de reconexión */
 }
 
-/* Animación para simular la "conexión eliminada" o "apagón" */
-@keyframes screen-shutdown {
-    0% { opacity: 1; transform: scale(1); }
-    100% { opacity: 0; transform: scale(0.8); }
+/* --- NUEVOS KEYFRAMES: EFECTO DE APAGÓN CRT --- */
+
+/* Clase para la animación de apagón (simula una línea que se encoge) */
+@keyframes crt-shutdown {
+    0% { transform: scaleY(1) translateY(0); opacity: 1; }
+    50% { transform: scaleY(0.05) translateY(0); opacity: 1; } /* Se vuelve una línea horizontal */
+    100% { transform: scaleY(0.05) translateY(0); opacity: 0; } /* La línea desaparece */
+}
+
+.screen-shutdown-effect {
+    /* La animación de apagón */
+    animation: crt-shutdown 0.6s ease-in forwards; 
+    /* Asegura que el contenedor principal esté oscuro mientras sucede */
+    background-color: black; 
 }
 
 .screen-shutdown-effect {
