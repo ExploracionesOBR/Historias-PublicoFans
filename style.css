@@ -35,25 +35,32 @@
     100% { transform: scaleY(0.05) translateY(0); opacity: 0; }
 }
 
+/* --- NUEVA ANIMACIÓN: LOGO CON ZOOM Y DESVANECIMIENTO (Duración total: 3s) --- */
+@keyframes logo-zoom-fade {
+    0% { transform: scale(0.1); opacity: 0; }
+    30% { transform: scale(1.1); opacity: 1; }
+    70% { transform: scale(1.1); opacity: 1; }
+    100% { transform: scale(2.0); opacity: 0; }
+}
+
 /* --- ANIMACIÓN DE APERTURA DE PORTAL/ESPIRAL (La que revela el fondo) --- */
 @keyframes portal-open {
     0% { 
-        clip-path: circle(0% at center); /* Inicia oculto */
+        clip-path: circle(0% at center);
         opacity: 1;
     }
     90% {
-        clip-path: circle(150% at center); /* Se expande */
+        clip-path: circle(150% at center);
         opacity: 1;
     }
     100% {
         clip-path: circle(150% at center);
         opacity: 0;
-        visibility: hidden; /* Oculta totalmente al final */
+        visibility: hidden;
     }
 }
 
-/* * 1. CUERPO (BODY): Configurado para la imagen de fondo y scroll en móvil.
- */
+/* * 1. CUERPO (BODY) */
 body {
     background-color: #0d0d0d;
     color: var(--text-color);
@@ -80,8 +87,7 @@ body {
     background-attachment: fixed; 
 }
 
-/* * 2. CAPA OSCURA (::before): Asegura que la imagen no opaque el texto.
- */
+/* * 2. CAPA OSCURA (::before): Oscurece el fondo para legibilidad. */
 body::before {
     content: "";
     position: fixed; 
@@ -89,14 +95,12 @@ body::before {
     left: 0;
     width: 100%;
     height: 100%;
-    /* Capa oscura general para legibilidad */
     background-color: rgba(0, 0, 0, 0.85); 
     z-index: -1; 
 }
 
 
-/* * 3. CONTENEDOR PRINCIPAL: Ahora tiene un fondo más transparente.
- */
+/* * 3. CONTENEDOR PRINCIPAL DEL FORMULARIO */
 .terminal-container {
     width: 100%; 
     max-width: 800px;
@@ -120,13 +124,25 @@ body::before {
     );
 }
 
+/* Visibilidad controlada por JS (Empieza invisible) */
+#contenedor-formulario {
+    opacity: 0;
+    pointer-events: none;
+    transition: opacity 1s ease-in-out; 
+}
+
+/* Cuando JS aplica display: block, se hace visible */
+#contenedor-formulario[style*="display: block"] {
+    opacity: 1 !important;
+    pointer-events: auto !important;
+}
+
 .screen-shutdown-effect {
     animation: crt-shutdown 0.6s ease-in forwards; 
     background-color: black; 
 }
 
-/* * 4. PANTALLA DE CARGA (IMPLEMENTACIÓN DE LA ESPIRAL)
- */
+/* * 4. PANTALLA DE CARGA (Para el texto y la animación de espiral) */
 #pantalla-carga {
     position: fixed;
     top: 0;
@@ -134,7 +150,7 @@ body::before {
     width: 100%;
     height: 100%;
     background-color: var(--bg-color); /* Fondo negro inicial */
-    z-index: 100; /* Asegura que esté por encima de todo el contenido */
+    z-index: 100; 
 
     display: flex;
     flex-direction: column;
@@ -143,16 +159,32 @@ body::before {
     text-align: center;
 }
 
-/* Esta clase es la que dispara la animación desde JS (script.js) */
+/* Clase para disparar la animación de espiral desde JS */
 .portal-animation-start {
     animation: portal-open 3s forwards; 
 }
 
+/* * 5. ESTILOS DEL LOGO */
+#logo-entrada {
+    width: 200px; /* Tamaño base del logo */
+    height: auto;
+    max-width: 80%;
+    opacity: 0; /* Empieza oculto */
+    transition: opacity 0.5s;
+    transform: scale(0.1); /* Empieza pequeño */
+}
 
-/* Estilos para que el texto de carga quede centrado en el efecto */
+/* Clase para disparar la animación del logo desde JS */
+.logo-animating {
+    animation: logo-zoom-fade 3s forwards; 
+}
+
+/* Estilos de Texto de Carga */
 #titulo-carga {
     font-size: 2.5em;
     animation: slow-glitch 0.5s infinite alternate;
+    /* Ocultamos el título durante la fase del logo */
+    transition: opacity 0.5s; 
 }
 
 #simulacion-carga {
@@ -296,20 +328,4 @@ textarea.input-terminal {
     background-color: var(--bg-color);
     color: var(--error-color);
     box-shadow: 0 0 10px var(--error-color);
-}
-
-/* --- EN style.css --- */
-
-/* HACEMOS EL CONTENEDOR INVISIBLE Y NO CLICKEABLE POR DEFECTO */
-#contenedor-formulario {
-    opacity: 0;
-    pointer-events: none; /* Esto evita que se pueda hacer click mientras está oculto */
-    transition: opacity 1s ease-in-out; /* Opcional: para una aparición suave si el JS lo pide */
-}
-
-/* Y aseguramos que el JS pueda mostrarlo. Si tienes una regla display: none en HTML, quítala. */
-
-#contenedor-formulario[style*="display: block"] {
-    opacity: 1 !important;
-    pointer-events: auto !important;
 }
