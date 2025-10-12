@@ -173,7 +173,7 @@ formulario.addEventListener('submit', function(e) {
             // ÉXITO: Llama al apagón
             formulario.reset(); 
             initiateShutdown(
-                "TESTIMONIO GUARDADO CON ÉXITO. Tu historia ha sido transferida y guardada por el equpo de OBR. Gracias por tu contribución.", 
+                "TESTIMONIO GUARDADO CON ÉXITO. Tu historia ha sido transferida y guardada por el equipo de OBR. Gracias por tu contribución.", 
                 false
             ); 
         } else {
