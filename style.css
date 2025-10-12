@@ -35,7 +35,7 @@
     100% { transform: scaleY(0.05) translateY(0); opacity: 0; }
 }
 
-/* --- NUEVA ANIMACIÓN: LOGO CON ZOOM Y DESVANECIMIENTO (Duración total: 3s) --- */
+/* --- ANIMACIÓN 1: LOGO CON ZOOM Y DESVANECIMIENTO (Duración total: 3s) --- */
 @keyframes logo-zoom-fade {
     0% { transform: scale(0.1); opacity: 0; }
     30% { transform: scale(1.1); opacity: 1; }
@@ -43,7 +43,7 @@
     100% { transform: scale(2.0); opacity: 0; }
 }
 
-/* --- ANIMACIÓN DE APERTURA DE PORTAL/ESPIRAL (La que revela el fondo) --- */
+/* --- ANIMACIÓN 2: APERTURA DE PORTAL/ESPIRAL (Duración total: 3s) --- */
 @keyframes portal-open {
     0% { 
         clip-path: circle(0% at center);
@@ -124,14 +124,14 @@ body::before {
     );
 }
 
-/* Visibilidad controlada por JS (Empieza invisible) */
+/* Control de visibilidad del formulario: empieza invisible e inactivo */
 #contenedor-formulario {
     opacity: 0;
     pointer-events: none;
     transition: opacity 1s ease-in-out; 
 }
 
-/* Cuando JS aplica display: block, se hace visible */
+/* Hace el formulario visible y clickeable cuando JS aplica display: block */
 #contenedor-formulario[style*="display: block"] {
     opacity: 1 !important;
     pointer-events: auto !important;
@@ -142,7 +142,7 @@ body::before {
     background-color: black; 
 }
 
-/* * 4. PANTALLA DE CARGA (Para el texto y la animación de espiral) */
+/* * 4. PANTALLA DE CARGA (Contiene texto y logo, y se anima con la espiral) */
 #pantalla-carga {
     position: fixed;
     top: 0;
@@ -174,7 +174,7 @@ body::before {
     transform: scale(0.1); /* Empieza pequeño */
 }
 
-/* Clase para disparar la animación del logo desde JS */
+/* Clase para disparar la animación de ZOOM del logo desde JS */
 .logo-animating {
     animation: logo-zoom-fade 3s forwards; 
 }
@@ -183,7 +183,6 @@ body::before {
 #titulo-carga {
     font-size: 2.5em;
     animation: slow-glitch 0.5s infinite alternate;
-    /* Ocultamos el título durante la fase del logo */
     transition: opacity 0.5s; 
 }
 
@@ -212,7 +211,8 @@ body::before {
     animation: slow-glitch 0.5s infinite alternate;
 }
 
-/* Formulario */
+/* --- ESTILOS DE FORMULARIO ABAJO --- */
+
 label, .instrucciones {
     display: block;
     margin-top: 15px;
