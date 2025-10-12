@@ -11,9 +11,9 @@
     <div class="terminal-container">
         <div id="pantalla-carga">
             <h1 id="titulo-carga" class="header-glitch"></h1>
-            <div id="simulacion-carga" class="glitch">
+            <div id="simulacion-carga">
                 <span class="line-start">> </span>
-                <span id="carga-texto">Iniciando conexión con EXPLORACIONES OBR...</span>
+                <span id="carga-texto"></span>
             </div>
         </div>
         
@@ -23,17 +23,15 @@
             <div id="cronometro-display" class="timer-warning">5:00</div>
             <p class="instrucciones">Escribe rápido, el portal de conexión es inestable. Si el tiempo expira, las entidades reclamarán tu testimonio.</p>
             
-            <div class="animated-border-wrapper"> 
-                <form id="formulario-historia">
-                    <label for="nombre" class="glitch-label">Nombre del Escritor:</label>
-                    <input type="text" id="nombre" name="data[Nombre]" required class="input-terminal"> 
-                    
-                    <label for="historia" class="glitch-label">Describe tu Encuentro (La Pesadilla):</label>
-                    <textarea id="historia" name="data[Historia]" rows="15" required class="input-terminal"></textarea>
-                    
-                    <button type="submit" id="guardar-btn" class="btn-terminal">GUARDAR HISTORIA</button>
-                </form>
-            </div>
+            <form id="formulario-historia">
+                <label for="nombre" class="glitch-label">Nombre del Escritor:</label>
+                <input type="text" id="nombre" name="data[Nombre]" required class="input-terminal"> 
+                
+                <label for="historia" class="glitch-label">Describe tu Encuentro (La Pesadilla):</label>
+                <textarea id="historia" name="data[Historia]" rows="15" required class="input-terminal"></textarea>
+                
+                <button type="submit" id="guardar-btn" class="btn-terminal">GUARDAR HISTORIA</button>
+            </form>
         </div>
     </div>
 
