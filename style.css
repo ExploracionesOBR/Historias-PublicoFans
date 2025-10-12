@@ -7,33 +7,44 @@
 }
 
 body {
-    background-color: var(--bg-color);
+    background-color: var(--bg-color); /* Color de fondo por si la imagen no carga */
     color: var(--text-color);
     font-family: var(--font-family);
     
-    /* Importante: Ajuste la configuración de display y altura */
     display: flex;
     flex-direction: column; 
     align-items: center;
     
-    /* Asegura que cubra al menos la pantalla completa, pero permite crecer */
     min-height: 100vh; 
     
-    /* Ajuste de margen y padding para móvil */
     margin: 0;
     padding: 20px 10px; 
     
-    /* Esta es la clave: asegura que siempre haya una barra de desplazamiento si es necesario */
     overflow-y: auto; 
     
-    /* El resto del background sigue igual */
-    background: repeating-linear-gradient(
-        transparent 0,
-        rgba(0, 0, 0, 0.4) 1px,
-        transparent 2px
-    ), var(--bg-color);
+    /* --- ¡NUEVAS PROPIEDADES PARA LA IMAGEN DE FONDO! --- */
+    background-image: url('fondo_terror.jpg'); /* <-- ¡CAMBIA 'fondo_terror.jpg' POR EL NOMBRE DE TU ARCHIVO! */
+    background-size: cover; /* Hace que la imagen cubra todo el fondo sin perder proporción */
+    background-position: center center; /* Centra la imagen */
+    background-repeat: no-repeat; /* Evita que la imagen se repita si es pequeña */
+    background-attachment: fixed; /* Mantiene la imagen fija al hacer scroll (opcional, puedes quitarlo si quieres que se mueva) */
+    
+    /* Mantenemos el efecto de líneas CRT, pero sobre la imagen de fondo */
+    background: 
+        linear-gradient(rgba(0,0,0,0.6), rgba(0,0,0,0.6)), /* Capa oscura semitransparente sobre la imagen */
+        repeating-linear-gradient(
+            transparent 0,
+            rgba(0, 0, 0, 0.4) 1px,
+            transparent 2px
+        ), 
+        url('fondo_terror.jpg'); /* <-- ¡CAMBIA 'fondo_terror.jpg' AQUÍ TAMBIÉN! */
+    
+    /* Ajusta cómo se aplica el fondo cuando hay múltiples fondos */
+    background-size: cover, auto, cover; 
+    background-position: center center, 0 0, center center;
+    background-repeat: no-repeat, repeat, no-repeat;
+    background-attachment: fixed, scroll, fixed;
 }
-
 /* También, asegúrate de que el contenedor terminal no tenga conflictos de altura */
 .terminal-container {
     width: 100%; 
