@@ -21,7 +21,7 @@ body {
     
     /* --- PRUEBA SIMPLE: Solo la Imagen --- */
     
-    background-image: url('TU_NOMBRE_DE_IMAGEN.jpg'); /* <-- ¡VERIFICA ESTA RUTA! */
+    background-image: url('fondo_terror.jpg'); /* <-- ¡VERIFICA ESTA RUTA! */
     background-size: cover; 
     background-position: center center; 
     background-repeat: no-repeat; 
