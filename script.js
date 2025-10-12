@@ -1,7 +1,7 @@
 // ** CONFIGURACIÓN CLAVE: REEMPLAZA ESTA URL CON TU API DE SHEETDB **
 const FORM_URL = 'https://sheetdb.io/api/v1/txamjw05ii0f9'; 
 // Elementos del DOM
-const terminalContainer = document.querySelector('.terminal-container'); // ¡Nuevo!
+const terminalContainer = document.querySelector('.terminal-container'); 
 const tituloCarga = document.getElementById('titulo-carga');
 const cargaTexto = document.getElementById('carga-texto');
 const simulacionCarga = document.getElementById('simulacion-carga');
@@ -66,17 +66,20 @@ const secuencia = [
 
 function mostrarMensaje(index) {
     if (index >= secuencia.length) {
-    // El delay total es de 2 segundos. La animación CSS tiene 10s de delay, 
-    // lo cual permite que la secuencia de texto termine y luego el CSS abre el portal.
-    setTimeout(() => {
-        // Asegúrate de que el formulario esté visible para que aparezca después del portal
-        contenedorFormulario.style.display = 'block';
-        iniciarCronometro(120); 
+        // --- INICIO DE LA ANIMACIÓN DE ESPIRAL CSS ---
+        pantallaCarga.classList.add('portal-animation-start'); 
         
-        // El CSS ahora maneja el desvanecimiento de pantallaCarga con la animación 'portal-open'
-    }, 2000); 
-    return;
-}
+        // El tiempo de espera (4s) es mayor que la duración de la animación CSS (3s) 
+        // para asegurar que la animación termine antes de ocultar el elemento.
+        setTimeout(() => {
+            // Oculta la pantalla de carga y MUESTRA el formulario
+            pantallaCarga.style.display = 'none';
+            contenedorFormulario.style.display = 'block';
+            iniciarCronometro(120); 
+        }, 4000); // Dale 4 segundos para que la animación termine y se oculte
+        
+        return;
+    }
 
     const paso = secuencia[index];
     const delay = (index === 0) ? 0 : 2500;
@@ -195,4 +198,8 @@ formulario.addEventListener('submit', function(e) {
 });
 
 // Inicia el flujo al cargar la ventana
-window.onload = () => mostrarMensaje(0);
+window.onload = () => {
+    // Esconde el formulario hasta que la carga termine
+    contenedorFormulario.style.display = 'none'; 
+    mostrarMensaje(0);
+};
