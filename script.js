@@ -12,6 +12,7 @@ const displayCronometro = document.getElementById('cronometro-display');
 const areaTexto = document.getElementById('historia');
 const inputNombre = document.getElementById('nombre');
 const guardarBtn = document.getElementById('guardar-btn');
+const logoEntrada = document.getElementById('logo-entrada'); // ¡Nuevo!
 
 // --- NUEVO ELEMENTO: Contenedor para mensajes a pantalla completa ---
 const fullScreenMessageContainer = document.createElement('div');
@@ -27,13 +28,10 @@ let tiempoRestanteActual = 0;
 
 /** Muestra la pantalla negra y simula el apagón CRT */
 function initiateShutdown(message, showReconnectButton = true) {
-    // 1. Detiene el cronómetro por seguridad
     if (intervaloCronometro) clearInterval(intervaloCronometro);
     
-    // 2. Aplica la animación de apagón CRT al contenedor principal
     terminalContainer.classList.add('screen-shutdown-effect');
     
-    // 3. Después de que la animación termine (600ms), muestra el mensaje a pantalla completa.
     setTimeout(() => {
         fullScreenMessageContainer.innerHTML = `<p>${message}</p>`;
         
@@ -48,7 +46,6 @@ function initiateShutdown(message, showReconnectButton = true) {
         fullScreenMessageContainer.classList.add('full-screen-message');
         fullScreenMessageContainer.style.display = 'flex';
         
-        // Esconde completamente el contenedor de la terminal para asegurar que el fondo sea negro puro
         terminalContainer.style.display = 'none';
 
     }, 600); 
@@ -64,29 +61,38 @@ const secuencia = [
     { text: "Conectado. Acceso concedido." }
 ];
 
-function mostrarMensaje(index) {
-   if (index >= secuencia.length) {
-    // 1. INICIA LA ANIMACIÓN CSS DE ESPIRAL
-    pantallaCarga.classList.add('portal-animation-start'); 
+function iniciarAnimacionFinal() {
+    // 1. Ocultar textos de carga
+    tituloCarga.style.display = 'none';
+    simulacionCarga.style.display = 'none';
     
-    // 2. AUMENTAMOS el tiempo de espera a 4.5 segundos para garantizar la ejecución de la animación.
+    // 2. Mostrar y animar el logo (duración de la animación: 3s)
+    logoEntrada.style.display = 'block';
+    logoEntrada.classList.add('logo-animating'); 
+    
+    // 3. Esperar a que la animación del logo termine
     setTimeout(() => {
-        // 3. Oculta la capa de carga (ya desvanecida por el CSS)
-        pantallaCarga.style.display = 'none';
+        // 4. Iniciar la animación de espiral (duración: 3s)
+        pantallaCarga.classList.add('portal-animation-start'); 
         
-        // 4. Muestra el formulario
-        contenedorFormulario.style.opacity = '1'; // Se asegura de que no haya opacidad
-        contenedorFormulario.style.pointerEvents = 'auto'; // Habilita clics
-        contenedorFormulario.style.display = 'block';
-        
-        iniciarCronometro(120); 
-    }, 4500); // 4.5 segundos para la transición
-    
-    return;
+        // 5. Esperar a que la espiral termine (3.5 segundos para seguridad)
+        setTimeout(() => {
+            pantallaCarga.style.display = 'none';
+            contenedorFormulario.style.display = 'block';
+            iniciarCronometro(120); 
+        }, 3500); 
+    }, 3000); // El tiempo total que dura la animación logo-zoom-fade es 3s
 }
 
+
+function mostrarMensaje(index) {
+    if (index >= secuencia.length) {
+        // Al terminar la secuencia de texto, inicia la animación final
+        iniciarAnimacionFinal();
+        return;
+    }
+
     const paso = secuencia[index];
-    // Retraso para el primer paso, luego 2.5s entre mensajes (total secuencia: ~10s)
     const delay = (index === 0) ? 0 : 2500; 
 
     setTimeout(() => {
@@ -95,11 +101,15 @@ function mostrarMensaje(index) {
         setTimeout(() => {
             if (paso.title) {
                 tituloCarga.textContent = paso.title;
+                // Mostrar titulo y ocultar simulación si solo hay título
+                tituloCarga.style.opacity = 1;
+                simulacionCarga.style.display = 'none';
             }
             
-            cargaTexto.textContent = paso.text;
-
             if (paso.text !== "") {
+                tituloCarga.style.opacity = 0; // Oculta el título si hay texto de simulación
+                simulacionCarga.style.display = 'block';
+                cargaTexto.textContent = paso.text;
                 simulacionCarga.classList.add('show-text');
             } else {
                  simulacionCarga.classList.remove('show-text');
@@ -111,21 +121,18 @@ function mostrarMensaje(index) {
     }, delay);
 }
 
-// --- B. CRONÓMETRO Y FUNCIÓN DE ELIMINACIÓN ---
 
+// --- B. CRONÓMETRO Y FUNCIÓN DE ELIMINACIÓN ---
 function actualizarCronometro() {
     if (tiempoRestanteActual <= 0) {
-        // TIEMPO EXCEDIDO: Llama al apagón
         clearInterval(intervaloCronometro);
         displayCronometro.textContent = "¡ERROR 404! LAS ENTIDADES RECLAMARON TU TESTIMONIO.";
         displayCronometro.classList.add('timer-expired');
         
-        // 1. Limpia datos (opcional, por si acaso)
         areaTexto.value = "";
         inputNombre.value = "";
         guardarBtn.disabled = true;
         
-        // 2. Ejecuta el apagón y muestra el mensaje
         initiateShutdown("El portal se cerró. Tu testimonio no fue guardado a tiempo y fue reclamado por los espectros.");
         return; 
     }
@@ -182,20 +189,17 @@ formulario.addEventListener('submit', function(e) {
     .then(response => response.json())
     .then(data => {
         if (data.created) {
-            // ÉXITO: Llama al apagón
             formulario.reset(); 
             initiateShutdown(
                 "TESTIMONIO GUARDADO CON ÉXITO. Tu historia ha sido transferida y guardada por el equipo de OBR. Gracias por tu contribución.", 
                 false
             ); 
         } else {
-            // ERROR: Llama al apagón
             displayCronometro.textContent = "ERROR DE REGISTRO.";
             initiateShutdown("Fallo al guardar. El portal es inestable o la protección fantasmal colapsó. Inténtalo de nuevo.");
         }
     })
     .catch(error => {
-        // FALLA DE RED: Llama al apagón
         displayCronometro.textContent = "FALLA EN LA RED CREADA";
         console.error('Error:', error);
         initiateShutdown("Falla de conexión. Revisa tu internet o la presencia espectral. Intenta de nuevo.");
@@ -206,5 +210,7 @@ formulario.addEventListener('submit', function(e) {
 window.onload = () => {
     // Esconde el formulario hasta que la carga termine
     contenedorFormulario.style.display = 'none'; 
+    // Oculta el logo al inicio
+    if (logoEntrada) logoEntrada.style.display = 'none'; 
     mostrarMensaje(0);
 };
