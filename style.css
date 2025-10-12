@@ -16,19 +16,16 @@ body {
     justify-content: center;
     align-items: center;
     min-height: 100vh;
-    overflow: hidden; /* Oculta barras de desplazamiento innecesarias */
+    overflow: hidden; 
+    /* El sutil efecto de líneas de escaneo */
+    background: repeating-linear-gradient(
+        transparent 0,
+        rgba(0, 0, 0, 0.4) 1px,
+        transparent 2px
+    ), var(--bg-color);
 }
 
-.terminal-container {
-    width: 90%;
-    max-width: 800px;
-    border: 2px solid var(--text-color);
-    padding: 30px;
-    box-shadow: 0 0 10px var(--text-color), 0 0 20px var(--text-color) inset;
-    background-color: rgba(0, 0, 0, 0.8);
-}
-
-/* Efecto de texto parpadeante/glitch para simular inestabilidad */
+/* Efectos de texto (mantienen el glitch) */
 @keyframes blink {
     0%, 100% { opacity: 1; }
     50% { opacity: 0.7; }
@@ -44,10 +41,44 @@ body {
     100% { transform: skewX(0deg); }
 }
 
+/* Animación de Pulso Fantasmal: crea un efecto de brillo que se enciende y apaga */
+@keyframes ghostly-pulse {
+    0% { box-shadow: 0 0 5px var(--text-color), 0 0 0 0 rgba(0, 255, 65, 0.5); }
+    50% { box-shadow: 0 0 20px var(--text-color), 0 0 20px 5px rgba(0, 255, 65, 0.8); }
+    100% { box-shadow: 0 0 5px var(--text-color), 0 0 0 0 rgba(0, 255, 65, 0.5); }
+}
+
+.terminal-container {
+    width: 90%;
+    max-width: 800px;
+    border: 2px solid var(--text-color);
+    padding: 30px;
+    box-shadow: 0 0 10px var(--text-color);
+    background-color: rgba(0, 0, 0, 0.8);
+    /* Aplicar el pulso fantasmal al contenedor principal */
+    animation: ghostly-pulse 5s infinite ease-in-out;
+}
+
 /* Estilos de la simulación de carga */
+#pantalla-carga {
+    text-align: center;
+    min-height: 200px;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+}
+
 #simulacion-carga {
     white-space: pre-wrap;
     font-size: 1.2em;
+    min-height: 25px; 
+    opacity: 0; 
+}
+
+.show-text {
+    opacity: 1 !important;
+    transition: opacity 0.5s;
     animation: blink 1s step-end infinite;
 }
 
@@ -84,7 +115,7 @@ label, .instrucciones {
     color: var(--text-color);
     font-family: var(--font-family);
     font-size: 1em;
-    box-sizing: border-box; /* Incluye padding en el ancho */
+    box-sizing: border-box; 
     transition: all 0.2s;
 }
 
@@ -136,76 +167,4 @@ label, .instrucciones {
     border-color: var(--error-color);
     cursor: not-allowed;
     opacity: 0.5;
-}
-/* --- NUEVA ANIMACIÓN DE BORDE (Efecto de "Aura") --- */
-
-/* Contenedor que simulará el borde con un pseudo-elemento */
-.animated-border-wrapper {
-    position: relative;
-    padding: 2px; /* Espacio para que se vea el borde animado */
-    z-index: 1; /* Asegura que el borde esté detrás del formulario */
-}
-
-/* El pseudo-elemento que crea el efecto de aura/luz */
-.animated-border-wrapper::before {
-    content: '';
-    position: absolute;
-    top: 0;
-    left: 0;
-    right: 0;
-    bottom: 0;
-    background: conic-gradient(
-        #ff004c 0deg,   /* Rojo terror */
-        #00ff41 90deg,  /* Verde neón */
-        #ff004c 180deg,
-        #00ff41 270deg,
-        #ff004c 360deg
-    );
-    /* Animación para rotar el gradiente */
-    animation: rotate-border 4s linear infinite;
-    z-index: -1; /* Colócalo detrás del contenido */
-    border-radius: 5px; /* Para coincidir con el diseño */
-}
-
-/* Define la animación de rotación */
-@keyframes rotate-border {
-    to {
-        transform: rotate(360deg);
-    }
-}
-
-/* Ajuste del formulario dentro del wrapper */
-.animated-border-wrapper form {
-    background-color: var(--bg-color); /* Fondo negro para que el gradiente se vea como borde */
-    padding: 20px;
-}
-
-/* Asegura que el formulario y el wrapper tengan buen aspecto */
-#contenedor-formulario .header-glitch {
-    margin-top: 0;
-}
-
-/* Ajustes para la pantalla de carga */
-#pantalla-carga {
-    text-align: center;
-    min-height: 200px;
-    display: flex;
-    flex-direction: column;
-    justify-content: center;
-    align-items: center;
-}
-
-/* Oculta la simulación de carga hasta que se llame en JS */
-#simulacion-carga {
-    white-space: pre-wrap;
-    font-size: 1.2em;
-    min-height: 25px; /* Para evitar saltos de pantalla */
-    opacity: 0; /* Inicialmente invisible */
-}
-
-/* Clase para hacer visible el texto de la simulación */
-.show-text {
-    opacity: 1 !important;
-    transition: opacity 0.5s;
-    animation: blink 1s step-end infinite;
 }
