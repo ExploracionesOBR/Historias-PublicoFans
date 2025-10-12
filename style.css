@@ -6,8 +6,10 @@
     --font-family: 'Courier New', monospace;
 }
 
+/* * 1. CUERPO (BODY): Configurado para la imagen de fondo y scroll en móvil.
+ * Se usa la ruta ABSOLUTA para evitar fallos.
+ */
 body {
-    /* --- PROPIEDADES BASE Y RUTA ABSOLUTA --- */
     background-color: #0d0d0d;
     color: var(--text-color);
     font-family: var(--font-family);
@@ -15,50 +17,44 @@ body {
     display: flex;
     flex-direction: column; 
     align-items: center;
+    
     min-height: 100vh; 
+    
     margin: 0;
     padding: 20px 10px; 
+    
+    /* Permite scroll en móvil si el contenido es muy largo */
     overflow-y: auto; 
     
-    /* NECESARIO para el pseudo-elemento de capa oscura */
+    /* Necesario para posicionar la capa oscura (::before) */
     position: relative; 
     
-    /* --- CAPAS DE FONDO SIMPLIFICADAS --- */
-    background: 
-        /* 1. Capa Oscura semi-transparente (rgba(0,0,0,0.8)) */
-        linear-gradient(rgba(0,0,0,0.8), rgba(0,0,0,0.8)),
-        
-        /* 2. Capa de Líneas CRT (efecto visual) */
-        repeating-linear-gradient(
-            transparent 0,
-            rgba(0, 0, 0, 0.4) 1px,
-            transparent 2px
-        ), 
-        
-        /* 3. IMAGEN DE FONDO (USANDO RUTA ABSOLUTA) */
-        url('https://exploracionesobr.github.io/Historias-PublicoFans/fondo_terror.jpg'); 
-    
-    /* Reglas para cada capa */
-    background-size: cover, auto, cover; 
-    background-position: center center, 0 0, center center;
-    background-repeat: no-repeat, repeat, no-repeat;
-    background-attachment: fixed, scroll, fixed;
+    /* --- CONFIGURACIÓN DE LA IMAGEN DE FONDO (SÓLO LA IMAGEN) --- */
+    /* ¡IMPORTANTE! Se usa la ruta absoluta validada. */
+    background-image: url('https://exploracionesobr.github.io/Historias-PublicoFans/fondo_terror.jpg'); 
+    background-size: cover; 
+    background-position: center center; 
+    background-repeat: no-repeat;
+    background-attachment: fixed; /* La imagen no se mueve al hacer scroll */
 }
 
-/* El contenido del body::before (capa oscura) y .terminal-container sigue igual. */
-
-/* También, asegúrate de que el contenedor terminal no tenga conflictos de altura */
-.terminal-container {
-    width: 100%; 
-    max-width: 800px;
-    /* ... (resto del estilo) ... */
-    padding: 20px 15px; 
-    box-sizing: border-box; 
-    /* Removido cualquier altura forzada para que se ajuste a su contenido */
-    margin-bottom: 20px; /* Asegura un poco de espacio al final */
+/* * 2. CAPA OSCURA (::before): Asegura que la imagen no opaque el texto.
+ */
+body::before {
+    content: "";
+    position: fixed; /* Fija sobre la imagen de fondo */
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    /* Capa oscura casi negra para legibilidad */
+    background-color: rgba(0, 0, 0, 0.85); 
+    z-index: -1; /* Coloca la capa detrás del contenido */
 }
 
-/* Efectos de texto (mantienen el glitch) */
+
+/* --- ANIMACIONES GENERALES --- */
+
 @keyframes blink {
     0%, 100% { opacity: 1; }
     50% { opacity: 0.7; }
@@ -74,45 +70,50 @@ body {
     100% { transform: skewX(0deg); }
 }
 
-/* Animación de Pulso Fantasmal: crea un efecto de brillo que se enciende y apaga */
 @keyframes ghostly-pulse {
     0% { box-shadow: 0 0 5px var(--text-color), 0 0 0 0 rgba(0, 255, 65, 0.5); }
     50% { box-shadow: 0 0 20px var(--text-color), 0 0 20px 5px rgba(0, 255, 65, 0.8); }
     100% { box-shadow: 0 0 5px var(--text-color), 0 0 0 0 rgba(0, 255, 65, 0.5); }
 }
 
-body {
-    background-color: var(--bg-color);
-    color: var(--text-color);
-    font-family: var(--font-family);
-    margin: 0;
-    padding: 20px 10px; /* Reducir padding horizontal en móvil */
-    display: flex;
-    flex-direction: column; /* Cambiado a columna para que el contenido fluya */
-    align-items: center;
-    min-height: 100vh; /* Permite que el cuerpo crezca */
-    /* REMOVIDO: overflow: hidden; */
+/* Animación de apagón CRT */
+@keyframes crt-shutdown {
+    0% { transform: scaleY(1) translateY(0); opacity: 1; }
+    50% { transform: scaleY(0.05) translateY(0); opacity: 1; }
+    100% { transform: scaleY(0.05) translateY(0); opacity: 0; }
+}
+
+
+/* * 3. CONTENEDOR PRINCIPAL: Manteniendo el efecto de terminal sobre la imagen.
+ */
+.terminal-container {
+    width: 100%; 
+    max-width: 800px;
+    border: 2px solid var(--text-color);
+    padding: 20px 15px; 
+    box-shadow: 0 0 10px var(--text-color);
+    /* Fondo oscuro para que las líneas CRT se vean dentro */
+    background-color: rgba(0, 0, 0, 0.8); 
+    animation: ghostly-pulse 5s infinite ease-in-out;
+    transition: opacity 1s ease-out;
+    box-sizing: border-box; 
+    margin-bottom: 20px;
     
-    background: repeating-linear-gradient(
+    /* Efecto de líneas CRT (ahora se aplica SOLO aquí) */
+    background-image: repeating-linear-gradient(
         transparent 0,
         rgba(0, 0, 0, 0.4) 1px,
         transparent 2px
-    ), var(--bg-color);
+    );
 }
 
-.terminal-container {
-    width: 100%; /* Ocupar todo el ancho en móvil */
-    max-width: 800px;
-    border: 2px solid var(--text-color);
-    padding: 20px 15px; /* Reducir padding interno */
-    box-shadow: 0 0 10px var(--text-color);
-    background-color: rgba(0, 0, 0, 0.8);
-    animation: ghostly-pulse 5s infinite ease-in-out;
-    transition: opacity 1s ease-out;
-    box-sizing: border-box; /* CLAVE: Asegura que el padding no desborde el ancho de la pantalla */
+.screen-shutdown-effect {
+    animation: crt-shutdown 0.6s ease-in forwards; 
+    background-color: black; 
 }
 
-/* Estilos de la simulación de carga */
+/* * 4. PANTALLA DE CARGA Y ESTILOS GENERALES
+ */
 #pantalla-carga {
     text-align: center;
     min-height: 200px;
@@ -139,7 +140,6 @@ body {
     color: var(--error-color);
 }
 
-/* Título con más énfasis en el glitch */
 .header-glitch {
     color: var(--error-color);
     font-size: 2.5em;
@@ -160,9 +160,6 @@ label, .instrucciones {
     animation: blink 2s step-end infinite;
 }
 
-/* Busca el bloque de Formulario */
-/* ... */
-
 .input-terminal {
     width: 100%;
     padding: 10px;
@@ -175,18 +172,15 @@ label, .instrucciones {
     transition: all 0.2s;
 }
 
-/* Ajuste específico para el área de texto (textarea) */
-textarea.input-terminal {
-    min-height: 250px; /* Reducir de 15 rows a una altura fija menor */
-    height: 250px;
-}
-
-/* ... */
-
 .input-terminal:focus {
     outline: none;
     border-color: var(--error-color);
     box-shadow: 0 0 5px var(--error-color);
+}
+
+textarea.input-terminal {
+    min-height: 250px; 
+    height: 250px;
 }
 
 /* Cronómetro */
@@ -233,10 +227,7 @@ textarea.input-terminal {
     opacity: 0.5;
 }
 
-/* --- NUEVAS CLASES PARA EL EFECTO DE APAGADO Y RECONEXIÓN --- */
-
-/* Clase para ocultar el contenido y mostrar un mensaje en el centro */
-/* Clase para ocultar el contenido y mostrar un mensaje en el centro */
+/* --- MENSAJE DE PANTALLA COMPLETA (APAGÓN) --- */
 .full-screen-message {
     position: fixed;
     top: 0;
@@ -249,34 +240,14 @@ textarea.input-terminal {
     align-items: center;
     z-index: 1000; 
     color: var(--error-color); 
-    font-size: 1.5em; /* Reducir un poco el tamaño de la fuente para que quepa mejor */
-    padding: 20px; /* Asegurar padding */
+    font-size: 1.5em; 
+    padding: 20px; 
     text-align: center;
     animation: blink 0.7s step-end infinite;
     flex-direction: column; 
     box-sizing: border-box; 
 }
-/* --- NUEVOS KEYFRAMES: EFECTO DE APAGÓN CRT --- */
 
-/* Clase para la animación de apagón (simula una línea que se encoge) */
-@keyframes crt-shutdown {
-    0% { transform: scaleY(1) translateY(0); opacity: 1; }
-    50% { transform: scaleY(0.05) translateY(0); opacity: 1; } /* Se vuelve una línea horizontal */
-    100% { transform: scaleY(0.05) translateY(0); opacity: 0; } /* La línea desaparece */
-}
-
-.screen-shutdown-effect {
-    /* La animación de apagón */
-    animation: crt-shutdown 0.6s ease-in forwards; 
-    /* Asegura que el contenedor principal esté oscuro mientras sucede */
-    background-color: black; 
-}
-
-.screen-shutdown-effect {
-    animation: screen-shutdown 1s forwards; /* 'forwards' mantiene el estado final */
-}
-
-/* Botón de reconexión */
 #reconnect-btn {
     background-color: var(--error-color);
     color: var(--bg-color);
