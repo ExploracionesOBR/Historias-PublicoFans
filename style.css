@@ -38,15 +38,19 @@
 /* --- NUEVA ANIMACIÓN DE APERTURA DE PORTAL/ESPIRAL --- */
 @keyframes portal-open {
     0% { 
-        clip-path: circle(0% at center); /* Inicia como un punto */
+        clip-path: circle(0% at center); 
+        opacity: 1;
+    }
+    10% {
+        clip-path: circle(0% at center); 
         opacity: 1;
     }
     90% {
-        clip-path: circle(70% at center); /* Se expande */
+        clip-path: circle(150% at center); 
         opacity: 1;
     }
     100% {
-        clip-path: circle(150% at center); /* Cubre toda la pantalla */
+        clip-path: circle(150% at center);
         opacity: 0;
         visibility: hidden;
     }
@@ -89,7 +93,6 @@ body::before {
     left: 0;
     width: 100%;
     height: 100%;
-    /* Capa oscura (0.85) para legibilidad, el contenido principal será más transparente. */
     background-color: rgba(0, 0, 0, 0.85); 
     z-index: -1; 
 }
@@ -104,7 +107,7 @@ body::before {
     padding: 20px 15px; 
     box-shadow: 0 0 10px var(--text-color);
     
-    /* El fondo del contenedor ahora es más transparente (0.5) para que se vea la imagen */
+    /* Fondo más transparente para ver la imagen */
     background-color: rgba(0, 0, 0, 0.5); 
     
     animation: ghostly-pulse 5s infinite ease-in-out;
@@ -133,12 +136,8 @@ body::before {
     left: 0;
     width: 100%;
     height: 100%;
-    background-color: var(--bg-color); /* Fondo negro inicial */
-    z-index: 100; /* Asegura que esté por encima de todo */
-    
-    /* Aplica la animación de apertura para que se "desvanezca" como espiral */
-    animation: portal-open 3s forwards; 
-    animation-delay: 10s; /* Da tiempo a la secuencia de carga de JS antes de la apertura */
+    background-color: var(--bg-color); 
+    z-index: 100; 
 
     display: flex;
     flex-direction: column;
@@ -146,6 +145,12 @@ body::before {
     align-items: center;
     text-align: center;
 }
+
+/* Esta clase es la que dispara la animación desde JS */
+.portal-animation-start {
+    animation: portal-open 3s forwards; 
+}
+
 
 /* Estilos para que el texto de carga quede centrado en el efecto */
 #titulo-carga {
