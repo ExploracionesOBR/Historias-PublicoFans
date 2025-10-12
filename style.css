@@ -6,53 +6,6 @@
     --font-family: 'Courier New', monospace;
 }
 
-/* * 1. CUERPO (BODY): Configurado para la imagen de fondo y scroll en móvil.
- * Se usa la ruta ABSOLUTA para evitar fallos.
- */
-body {
-    background-color: #0d0d0d;
-    color: var(--text-color);
-    font-family: var(--font-family);
-    
-    display: flex;
-    flex-direction: column; 
-    align-items: center;
-    
-    min-height: 100vh; 
-    
-    margin: 0;
-    padding: 20px 10px; 
-    
-    /* Permite scroll en móvil si el contenido es muy largo */
-    overflow-y: auto; 
-    
-    /* Necesario para posicionar la capa oscura (::before) */
-    position: relative; 
-    
-    /* --- CONFIGURACIÓN DE LA IMAGEN DE FONDO (SÓLO LA IMAGEN) --- */
-    /* ¡IMPORTANTE! Se usa la ruta absoluta validada. */
-    background-image: url('https://exploracionesobr.github.io/Historias-PublicoFans/fondo_terror.jpg'); 
-    background-size: cover; 
-    background-position: center center; 
-    background-repeat: no-repeat;
-    background-attachment: fixed; /* La imagen no se mueve al hacer scroll */
-}
-
-/* * 2. CAPA OSCURA (::before): Asegura que la imagen no opaque el texto.
- */
-body::before {
-    content: "";
-    position: fixed; /* Fija sobre la imagen de fondo */
-    top: 0;
-    left: 0;
-    width: 100%;
-    height: 100%;
-    /* Capa oscura casi negra para legibilidad */
-    background-color: rgba(0, 0, 0, 0.85); 
-    z-index: -1; /* Coloca la capa detrás del contenido */
-}
-
-
 /* --- ANIMACIONES GENERALES --- */
 
 @keyframes blink {
@@ -76,15 +29,73 @@ body::before {
     100% { box-shadow: 0 0 5px var(--text-color), 0 0 0 0 rgba(0, 255, 65, 0.5); }
 }
 
-/* Animación de apagón CRT */
 @keyframes crt-shutdown {
     0% { transform: scaleY(1) translateY(0); opacity: 1; }
     50% { transform: scaleY(0.05) translateY(0); opacity: 1; }
     100% { transform: scaleY(0.05) translateY(0); opacity: 0; }
 }
 
+/* --- NUEVA ANIMACIÓN DE APERTURA DE PORTAL/ESPIRAL --- */
+@keyframes portal-open {
+    0% { 
+        clip-path: circle(0% at center); /* Inicia como un punto */
+        opacity: 1;
+    }
+    90% {
+        clip-path: circle(70% at center); /* Se expande */
+        opacity: 1;
+    }
+    100% {
+        clip-path: circle(150% at center); /* Cubre toda la pantalla */
+        opacity: 0;
+        visibility: hidden;
+    }
+}
 
-/* * 3. CONTENEDOR PRINCIPAL: Manteniendo el efecto de terminal sobre la imagen.
+/* * 1. CUERPO (BODY): Configurado para la imagen de fondo y scroll en móvil.
+ */
+body {
+    background-color: #0d0d0d;
+    color: var(--text-color);
+    font-family: var(--font-family);
+    
+    display: flex;
+    flex-direction: column; 
+    align-items: center;
+    
+    min-height: 100vh; 
+    
+    margin: 0;
+    padding: 20px 10px; 
+    
+    overflow-y: auto; 
+    
+    position: relative; 
+    
+    /* --- CONFIGURACIÓN DE LA IMAGEN DE FONDO (RUTA ABSOLUTA) --- */
+    background-image: url('https://exploracionesobr.github.io/Historias-PublicoFans/fondo_terror.jpg'); /* ¡VERIFICAR! */
+    background-size: cover; 
+    background-position: center center; 
+    background-repeat: no-repeat;
+    background-attachment: fixed; 
+}
+
+/* * 2. CAPA OSCURA (::before): Asegura que la imagen no opaque el texto.
+ */
+body::before {
+    content: "";
+    position: fixed; 
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    /* Capa oscura (0.85) para legibilidad, el contenido principal será más transparente. */
+    background-color: rgba(0, 0, 0, 0.85); 
+    z-index: -1; 
+}
+
+
+/* * 3. CONTENEDOR PRINCIPAL: Ahora tiene un fondo más transparente.
  */
 .terminal-container {
     width: 100%; 
@@ -92,14 +103,16 @@ body::before {
     border: 2px solid var(--text-color);
     padding: 20px 15px; 
     box-shadow: 0 0 10px var(--text-color);
-    /* Fondo oscuro para que las líneas CRT se vean dentro */
-    background-color: rgba(0, 0, 0, 0.8); 
+    
+    /* El fondo del contenedor ahora es más transparente (0.5) para que se vea la imagen */
+    background-color: rgba(0, 0, 0, 0.5); 
+    
     animation: ghostly-pulse 5s infinite ease-in-out;
     transition: opacity 1s ease-out;
     box-sizing: border-box; 
     margin-bottom: 20px;
     
-    /* Efecto de líneas CRT (ahora se aplica SOLO aquí) */
+    /* Efecto de líneas CRT */
     background-image: repeating-linear-gradient(
         transparent 0,
         rgba(0, 0, 0, 0.4) 1px,
@@ -112,15 +125,32 @@ body::before {
     background-color: black; 
 }
 
-/* * 4. PANTALLA DE CARGA Y ESTILOS GENERALES
+/* * 4. PANTALLA DE CARGA (IMPLEMENTACIÓN DE LA ESPIRAL)
  */
 #pantalla-carga {
-    text-align: center;
-    min-height: 200px;
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: var(--bg-color); /* Fondo negro inicial */
+    z-index: 100; /* Asegura que esté por encima de todo */
+    
+    /* Aplica la animación de apertura para que se "desvanezca" como espiral */
+    animation: portal-open 3s forwards; 
+    animation-delay: 10s; /* Da tiempo a la secuencia de carga de JS antes de la apertura */
+
     display: flex;
     flex-direction: column;
     justify-content: center;
     align-items: center;
+    text-align: center;
+}
+
+/* Estilos para que el texto de carga quede centrado en el efecto */
+#titulo-carga {
+    font-size: 2.5em;
+    animation: slow-glitch 0.5s infinite alternate;
 }
 
 #simulacion-carga {
