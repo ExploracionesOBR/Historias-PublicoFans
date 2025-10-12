@@ -7,10 +7,21 @@
 }
 
 body {
-    background-color: black; 
+    /* --- CONFIGURACIÓN BÁSICA DEL FONDO --- */
+    background-color: #0d0d0d;
+    background-image: url('TU_NOMBRE_DE_IMAGEN.jpg'); /* <-- ¡VERIFICA ESTA RUTA! */
+    background-size: cover; 
+    background-position: center center; 
+    background-repeat: no-repeat;
+    background-attachment: fixed; 
+
+    /* --- CAPA OSCURA SIMPLE PARA LEGIBILIDAD (Overlay) --- */
+    /* Crea un pseudo-elemento que es una capa semitransparente sobre la imagen */
+    position: relative; /* Necesario para el pseudo-elemento */
+    
+    /* --- RESTO DE PROPIEDADES DE LAYOUT --- */
     color: var(--text-color);
     font-family: var(--font-family);
-    
     display: flex;
     flex-direction: column; 
     align-items: center;
@@ -18,18 +29,29 @@ body {
     margin: 0;
     padding: 20px 10px; 
     overflow-y: auto; 
-    
-    /* --- PRUEBA SIMPLE: Solo la Imagen --- */
-    
-    background-image: url('fondo_terror.jpg'); /* <-- ¡VERIFICA ESTA RUTA! */
-    background-size: cover; 
-    background-position: center center; 
-    background-repeat: no-repeat; 
-    background-attachment: fixed;
-    
-    /* QUITAMOS EL RESTO DE LAS PROPIEDADES DE 'background' COMPUESTAS POR AHORA */
 }
 
+/* --- ESTA CAPA OSCURA SIEMPRE APARECERÁ SOBRE LA IMAGEN DE FONDO --- */
+body::before {
+    content: "";
+    position: fixed; /* Fijo como la imagen de fondo */
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    /* Ajusta la opacidad (0.6 a 0.8 es bueno) */
+    background-color: rgba(0, 0, 0, 0.7); 
+    z-index: -1; /* Va detrás del contenido */
+}
+/* --- Fin del Pseudo-Elemento --- */
+
+/* Mantenemos las líneas CRT en el terminal-container para no interferir con la imagen */
+.terminal-container {
+    /* Asegúrate de que este contenedor NO tenga background-color: transparent, 
+       debe tener el fondo oscuro para ocultar las líneas CRT fuera de él. */
+    background-color: rgba(0, 0, 0, 0.8); /* Esto está bien */
+    /* ... (resto del estilo) ... */
+}
 
 /* También, asegúrate de que el contenedor terminal no tenga conflictos de altura */
 .terminal-container {
