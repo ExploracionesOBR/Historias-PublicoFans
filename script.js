@@ -81,9 +81,9 @@ function actualizarCronometro() {
         inputNombre.value = "";
         guardarBtn.disabled = true;
         
-        alert("El portal se cierra bruscamente. Tu testimonio no fue sellado a tiempo y fue borrado de la realidad.");
+        alert("El portal se cierro. Tu testimonio no fue guardado a tiempo y fue reclamado por las entidades.");
         
-        setTimeout(() => window.location.reload(), 5000); 
+        setTimeout(() => window.location.reload(), 1200); 
         return; // Detiene la función
     }
 
@@ -119,7 +119,7 @@ formulario.addEventListener('submit', function(e) {
     
     // 1. Detiene el cronómetro y desactiva el botón
     clearInterval(intervaloCronometro);
-    displayCronometro.textContent = "SELLANDO REGISTRO...";
+    displayCronometro.textContent = "Guardado con exito...";
     guardarBtn.disabled = true;
     
     // 2. Prepara los datos para SheetDB
@@ -142,13 +142,13 @@ formulario.addEventListener('submit', function(e) {
     .then(data => {
         if (data.created) {
             // Éxito
-            displayCronometro.textContent = "TESTIMONIO SELLADO CON ÉXITO";
-            alert("Tu historia ha sido transferida y sellada en el grimorio digital. Gracias por tu contribución.");
+            displayCronometro.textContent = "TESTIMONIO CARGADO CON ÉXITO";
+            alert("Tu historia ha sido transferida y guardada en el portal digital. Gracias por tu contribución.");
             formulario.reset(); 
         } else {
             // Error de API o de datos (Generalmente por la URL, revisar el paso 1 de la respuesta anterior)
             displayCronometro.textContent = "ERROR DE REGISTRO. INTENTA DE NUEVO";
-            alert("Fallo al guardar. El portal es inestable o la red fantasmal colapsó. Inténtalo de nuevo.");
+            alert("Fallo al guardar. El portal es inestable o la red anti fantasmal colapsó. Inténtalo de nuevo.");
             guardarBtn.disabled = false;
             iniciarCronometro(); // Reinicia el tiempo para que el usuario pueda reintentar
         }
@@ -157,7 +157,7 @@ formulario.addEventListener('submit', function(e) {
         // Falla de red (El servidor no pudo ser contactado)
         displayCronometro.textContent = "FALLA EN LA RED FANTASMAL";
         console.error('Error:', error);
-        alert("Falla de conexión. Revisa tu internet o la presencia espectral. Intenta de nuevo.");
+        alert("Falla de conexión. Revisa tu internet y activa la limpieza del lugar nuevamente.");
         guardarBtn.disabled = false;
         iniciarCronometro(); // Reinicia el tiempo
     });
