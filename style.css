@@ -10,18 +10,39 @@ body {
     background-color: var(--bg-color);
     color: var(--text-color);
     font-family: var(--font-family);
-    margin: 0;
-    padding: 20px;
+    
+    /* Importante: Ajuste la configuración de display y altura */
     display: flex;
-    justify-content: center;
+    flex-direction: column; 
     align-items: center;
-    min-height: 100vh;
-    overflow: hidden; 
+    
+    /* Asegura que cubra al menos la pantalla completa, pero permite crecer */
+    min-height: 100vh; 
+    
+    /* Ajuste de margen y padding para móvil */
+    margin: 0;
+    padding: 20px 10px; 
+    
+    /* Esta es la clave: asegura que siempre haya una barra de desplazamiento si es necesario */
+    overflow-y: auto; 
+    
+    /* El resto del background sigue igual */
     background: repeating-linear-gradient(
         transparent 0,
         rgba(0, 0, 0, 0.4) 1px,
         transparent 2px
     ), var(--bg-color);
+}
+
+/* También, asegúrate de que el contenedor terminal no tenga conflictos de altura */
+.terminal-container {
+    width: 100%; 
+    max-width: 800px;
+    /* ... (resto del estilo) ... */
+    padding: 20px 15px; 
+    box-sizing: border-box; 
+    /* Removido cualquier altura forzada para que se ajuste a su contenido */
+    margin-bottom: 20px; /* Asegura un poco de espacio al final */
 }
 
 /* Efectos de texto (mantienen el glitch) */
