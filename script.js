@@ -66,13 +66,17 @@ const secuencia = [
 
 function mostrarMensaje(index) {
     if (index >= secuencia.length) {
-        setTimeout(() => {
-            pantallaCarga.style.display = 'none';
-            contenedorFormulario.style.display = 'block';
-            iniciarCronometro(120); 
-        }, 1500);
-        return;
-    }
+    // El delay total es de 2 segundos. La animación CSS tiene 10s de delay, 
+    // lo cual permite que la secuencia de texto termine y luego el CSS abre el portal.
+    setTimeout(() => {
+        // Asegúrate de que el formulario esté visible para que aparezca después del portal
+        contenedorFormulario.style.display = 'block';
+        iniciarCronometro(120); 
+        
+        // El CSS ahora maneja el desvanecimiento de pantallaCarga con la animación 'portal-open'
+    }, 2000); 
+    return;
+}
 
     const paso = secuencia[index];
     const delay = (index === 0) ? 0 : 2500;
