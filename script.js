@@ -126,7 +126,8 @@ function iniciarAperturaEspiral() {
 
     // 2. MUESTRA el título grande (BIENVENIDO AL PORTAL...)
     if (tituloCarga) {
-        tituloCarga.textContent = "BIENVENIDO AL PORTAL DE EXPLORACIONES OBR";
+        // **CORRECCIÓN CLAVE: INSERCIÓN DE <BR> PARA PANTALLAS MÓVILES**
+        tituloCarga.innerHTML = "BIENVENIDO AL PORTAL DE<br>EXPLORACIONES OBR";
         tituloCarga.style.opacity = 1;
         tituloCarga.style.display = 'block'; 
     }
@@ -208,42 +209,60 @@ if (formulario) {
     formulario.addEventListener('submit', function(e) {
         e.preventDefault(); 
         
+        // Desactivar UI y mostrar estado
         if (intervaloCronometro) clearInterval(intervaloCronometro);
         if (displayCronometro) displayCronometro.textContent = "ENCRIPTANDO REGISTRO...";
         if (guardarBtn) guardarBtn.disabled = true;
         if (mensajeEstado) mensajeEstado.textContent = "Procesando el envío..."; 
 
         const formData = new FormData(formulario);
+        
+        // Estructurar los datos para que coincidan con las columnas de Google Sheets
         const dataToSend = {};
-        formData.forEach((value, key) => {
-            const cleanKey = key.replace('data[', '').replace(']', '');
-            dataToSend[cleanKey] = value;
-        });
+
+        // Mapeo explícito a las columnas de la tabla (Nombre y Historia)
+        dataToSend["Nombre"] = formData.get("data[nombre]");
+        dataToSend["Historia"] = formData.get("data[historia]");
+        
+        const payload = JSON.stringify({ data: dataToSend });
+        
+        console.log("Intentando enviar datos:", payload); 
 
         fetch(FORM_URL, {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json',
             },
-            body: JSON.stringify({ data: dataToSend })
+            body: payload
         })
-        .then(response => response.json())
+        .then(response => {
+            if (!response.ok) {
+                console.error("Error HTTP al guardar:", response.status, response.statusText);
+                throw new Error("Fallo de conexión con el servidor de la base de datos.");
+            }
+            return response.json();
+        })
         .then(data => {
             if (data.created) {
+                // ÉXITO
                 formulario.reset(); 
                 initiateShutdown(
                     "TESTIMONIO GUARDADO CON ÉXITO. Tu historia ha sido transferida y guardada por el equipo de OBR. Gracias por tu contribución.", 
                     false 
                 ); 
             } else {
+                // ERROR DE API (Ejemplo: campos faltantes o error de formato de SheetDB)
                 if (displayCronometro) displayCronometro.textContent = "ERROR DE REGISTRO.";
-                initiateShutdown("Fallo al guardar. El portal es inestable o la protección fantasmal colapsó. Inténtalo de nuevo.");
+                console.error('Respuesta de SheetDB fallida:', data);
+                initiateShutdown("Fallo al guardar. La base de datos rechazó el testimonio. Revisa el formato o la configuración de SheetDB.");
             }
         })
         .catch(error => {
+            // FALLA DE RED O ERROR HTTP
             if (displayCronometro) displayCronometro.textContent = "FALLA EN LA RED CREADA";
-            console.error('Error:', error);
-            initiateShutdown("Falla de conexión. Revisa tu internet o la presencia espectral. Intenta de nuevo.");
+            console.error('Error de red o procesamiento:', error);
+            
+            initiateShutdown("Falla de conexión o de datos. Revisa la URL del API de SheetDB o tu conexión a internet. Intenta de nuevo.");
         });
     });
 }
