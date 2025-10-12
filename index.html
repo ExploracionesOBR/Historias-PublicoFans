@@ -3,35 +3,40 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>PORTAL OBR: REGISTRO DE HISTORIAS</title>
-    <link rel="stylesheet" href="style.css">
-</head>
-<head>
+    <title>Portal de Exploraciones OBR</title>
     <link rel="stylesheet" href="style.css"> 
 </head>
-<body style="height: 100vh; margin: 0;">
-    <div class="terminal-container">
-        </div>
-</body>
+<body>
+
+    <div id="pantalla-carga">
+        <img id="logo-entrada" src="LOGO_ENTRADA.png" alt="Logo de Entrada del Portal" style="display: none;">
         
-        <div id="contenedor-formulario" style="display: none;">
-            <h1 class="header-glitch">REGISTRO DE EXPERIENCIA FANTASMAL</h1>
-            
-            <div id="cronometro-display" class="timer-warning">2:00</div>
-            <p class="instrucciones">Escribe rápido, el portal de conexión es inestable. Si el tiempo expira, las entidades reclamarán tu testimonio.</p>
-            
-            <form id="formulario-historia">
-                <label for="nombre" class="glitch-label">Nombre del Escritor:</label>
-                <input type="text" id="nombre" name="data[Nombre]" required class="input-terminal"> 
-                
-                <label for="historia" class="glitch-label">Describe tu Encuentro (La Pesadilla):</label>
-                <textarea id="historia" name="data[Historia]" rows="15" required class="input-terminal"></textarea>
-                
-                <button type="submit" id="guardar-btn" class="btn-terminal">GUARDAR HISTORIA</button>
-            </form>
+        <h1 id="titulo-carga">BIENVENIDO AL PORTAL DE EXPLORACIONES OBR</h1>
+        <div id="simulacion-carga">
+            <span class="line-start"></span>
+            <span id="carga-texto"></span>
         </div>
     </div>
 
+    <div class="terminal-container" id="contenedor-formulario">
+        <h1 class="header-glitch">REGISTRO DE EXPERIENCIA FANTASMAL</h1>
+        
+        <h2 style="color: var(--text-color);">TESTIMONIO CARGADO CON ÉXITO</h2>
+
+        <p class="instrucciones">Escribe rápido, el portal de conexión es inestable. Si el tiempo expira, las entidades reclamarán tu testimonio.</p>
+        <div id="cronometro-display">0:00</div>
+
+        <form id="formulario-historia">
+            <label for="nombre" class="glitch-label">Nombre del Escritor:</label>
+            <input type="text" id="nombre" name="data[nombre]" class="input-terminal" required>
+            
+            <label for="historia" class="glitch-label">Describe tu Encuentro (La Pesadilla):</label>
+            <textarea id="historia" name="data[historia]" class="input-terminal" required></textarea>
+            
+            <button type="submit" id="guardar-btn" class="btn-terminal">GUARDAR HISTORIA</button>
+        </form>
+    </div>
+    
     <script src="script.js"></script>
 </body>
 </html>
