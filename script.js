@@ -28,7 +28,7 @@ if (!fullScreenMessageContainer) {
 let intervaloCronometro;
 let tiempoRestanteActual = 0; 
 
-// --- FUNCIONES DE APAGADO/RECONEXIÓN (Sin cambios, es correcto) ---
+// --- FUNCIONES DE APAGADO/RECONEXIÓN ---
 
 function initiateShutdown(message, showReconnectButton = true) {
     if (intervaloCronometro) clearInterval(intervaloCronometro);
@@ -56,7 +56,7 @@ function initiateShutdown(message, showReconnectButton = true) {
     }, 600); 
 }
 
-// --- B. CRONÓMETRO Y FUNCIÓN DE ELIMINACIÓN (Es correcto) ---
+// --- B. CRONÓMETRO Y FUNCIÓN DE ELIMINACIÓN ---
 
 function actualizarCronometro() {
     if (tiempoRestanteActual <= 0) {
@@ -101,12 +101,14 @@ function iniciarCronometro(segundosIniciales = 180) { // 180 SEGUNDOS (3 MINUTOS
     
     if (guardarBtn) guardarBtn.disabled = false;
 
+    // CORRECCIÓN CLAVE: Llama a actualizarCronometro inmediatamente para iniciar el conteo
+    actualizarCronometro(); 
     intervaloCronometro = setInterval(actualizarCronometro, 1000);
 }
 
 
 // --- A. SIMULACIÓN DE CARGA TEMÁTICA (4 FASES) ---
-// FASE 1: Textos de validación (Ajustado para empezar con Conectado...)
+// FASE 1: Textos de validación (Inicia con Conectado...)
 const secuencia = [
     { text: "Conectado..." }, // Paso 1
     { text: "Revisando el nivel fantasmal..." },
@@ -118,12 +120,11 @@ const secuencia = [
  * FASE 4: Inicia la animación de espiral (revelación final).
  */
 function iniciarAperturaEspiral() {
-    // 1. Ocultar textos de carga
+    // 1. Ocultar el texto final de conexión
     if (tituloCarga) tituloCarga.style.opacity = 0;
     if (simulacionCarga) simulacionCarga.style.display = 'none';
 
     // 2. MUESTRA el título grande (BIENVENIDO AL PORTAL...)
-    // **NOTA:** Este titulo es el que debe verse antes de la apertura final
     if (tituloCarga) {
         tituloCarga.textContent = "BIENVENIDO AL PORTAL DE EXPLORACIONES OBR";
         tituloCarga.style.opacity = 1;
@@ -183,7 +184,7 @@ function mostrarMensaje(index) {
         if (simulacionCarga) simulacionCarga.classList.remove('show-text');
         
         setTimeout(() => {
-            // No necesitamos manejar paso.title aquí, solo el texto
+            // Aseguramos que el titulo principal esté oculto
             if (tituloCarga) tituloCarga.style.opacity = 0; 
             
             if (paso.text !== "" && cargaTexto) {
@@ -201,7 +202,7 @@ function mostrarMensaje(index) {
 }
 
 
-// --- C. ENVÍO DE DATOS A SHEETDB (Es correcto) ---
+// --- C. ENVÍO DE DATOS A SHEETDB ---
 
 if (formulario) {
     formulario.addEventListener('submit', function(e) {
@@ -254,8 +255,6 @@ window.onload = () => {
     if (contenedorFormulario) contenedorFormulario.style.display = 'none'; 
     if (logoEntrada) logoEntrada.style.display = 'none'; 
     
-    // **CORRECCIÓN CLAVE:** El título inicial que aparece en el HTML (INICIANDO CONEXIÓN)
-    // debe ser reemplazado por el primer mensaje de la secuencia si es necesario. 
-    // Llamamos directamente a la secuencia de mensajes.
+    // Inicia la secuencia de mensajes de carga
     mostrarMensaje(0);
 };
