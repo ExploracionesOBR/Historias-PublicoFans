@@ -89,7 +89,7 @@ body::before {
     left: 0;
     width: 100%;
     height: 100%;
-    /* Reducir la opacidad para que se vea más el fondo */
+    /* Capa de oscuridad (Opacidad reducida a 0.7) */
     background-color: rgba(0, 0, 0, 0.7); 
     z-index: -1; 
 }
@@ -107,7 +107,7 @@ body::before {
     flex-direction: column;
     justify-content: center;
     align-items: center;
-    text-align: center; /* Centrar el contenido de la pantalla de carga */
+    text-align: center;
 }
 
 /* Dispara la animación de espiral */
@@ -164,13 +164,14 @@ body::before {
     border: 2px solid var(--text-color);
     padding: 20px 15px; 
     box-shadow: 0 0 5px var(--text-color);
-    /* Fondo muy transparente para ver el fondo_terror.jpg */
-    background-color: rgba(0, 0, 0, 0.2); 
+    /* TRANSPARENCIA TOTAL */
+    background-color: transparent; 
+    background-image: none;
+    
     animation: ghostly-pulse 5s infinite ease-in-out;
     transition: opacity 1s ease-out;
     box-sizing: border-box; 
     margin-bottom: 20px;
-    background-image: none; /* Asegurar que no haya degradados oscurecedores */
 }
 
 /* Control de visibilidad del formulario: empieza invisible e inactivo */
@@ -214,7 +215,8 @@ label, .instrucciones {
 .input-terminal {
     width: 100%;
     padding: 10px;
-    background-color: transparent;
+    /* Aseguramos que el input tenga un fondo para que el texto sea legible */
+    background-color: rgba(0, 0, 0, 0.7); 
     border: 1px solid var(--text-color);
     color: var(--text-color);
     font-family: var(--font-family);
