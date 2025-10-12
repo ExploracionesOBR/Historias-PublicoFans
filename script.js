@@ -66,23 +66,25 @@ const secuencia = [
 
 function mostrarMensaje(index) {
     if (index >= secuencia.length) {
-        // --- INICIO DE LA ANIMACIÓN DE ESPIRAL CSS ---
+        // --- AQUÍ SE INICIA LA ANIMACIÓN DE APERTURA ---
+        
+        // 1. Añade la clase que tiene la animación CSS (portal-animation-start)
         pantallaCarga.classList.add('portal-animation-start'); 
         
-        // El tiempo de espera (4s) es mayor que la duración de la animación CSS (3s) 
-        // para asegurar que la animación termine antes de ocultar el elemento.
+        // 2. Espera 4 segundos. La animación CSS dura 3 segundos. Esto asegura que termine.
         setTimeout(() => {
-            // Oculta la pantalla de carga y MUESTRA el formulario
+            // 3. Oculta el elemento de carga y muestra el formulario
             pantallaCarga.style.display = 'none';
             contenedorFormulario.style.display = 'block';
             iniciarCronometro(120); 
-        }, 4000); // Dale 4 segundos para que la animación termine y se oculte
+        }, 4000); // Espera 4 segundos antes de mostrar el formulario
         
         return;
     }
 
     const paso = secuencia[index];
-    const delay = (index === 0) ? 0 : 2500;
+    // Retraso para el primer paso, luego 2.5s entre mensajes (total secuencia: ~10s)
+    const delay = (index === 0) ? 0 : 2500; 
 
     setTimeout(() => {
         simulacionCarga.classList.remove('show-text');
