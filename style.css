@@ -4,6 +4,9 @@
     --text-color: #00ff41;
     --error-color: #ff004c;
     --font-family: 'Courier New', monospace;
+    /* Nuevo color más brillante para el título */
+    --neon-blue: #00e0ff;
+    --neon-shadow: 0 0 5px var(--neon-blue), 0 0 10px var(--neon-blue);
 }
 
 /* --- ANIMACIONES --- */
@@ -58,6 +61,35 @@
     0% { transform: scaleY(1) translateY(0); opacity: 1; }
     50% { transform: scaleY(0.05) translateY(0); opacity: 1; }
     100% { transform: scaleY(0.05) translateY(0); opacity: 0; }
+}
+
+/* Animación Glitch más visible para el Título */
+@keyframes neon-glitch {
+    0% {
+        text-shadow: -2px -2px 0 var(--error-color), 2px 2px 0 var(--neon-blue);
+        transform: translate(0);
+        opacity: 1;
+    }
+    10% {
+        text-shadow: 2px 2px 0 var(--error-color), -2px -2px 0 var(--neon-blue);
+        transform: translate(5px);
+        opacity: 0.8;
+    }
+    20% {
+        text-shadow: -2px 2px 0 var(--neon-blue), 2px -2px 0 var(--error-color);
+        transform: translate(-5px);
+        opacity: 1;
+    }
+    30% {
+        text-shadow: 0 0 5px var(--neon-blue), 0 0 10px var(--neon-blue);
+        transform: translate(0);
+        opacity: 1;
+    }
+    100% {
+        text-shadow: 0 0 5px var(--neon-blue), 0 0 10px var(--neon-blue);
+        transform: translate(0);
+        opacity: 1;
+    }
 }
 
 
@@ -130,12 +162,26 @@ body::before {
     animation: logo-zoom-fade 3s forwards; 
 }
 
-/* * TEXTOS DE CARGA - AUMENTO DE TAMAÑO Y CENTRADO */
+/* * TEXTOS DE CARGA - AUMENTO DE TAMAÑO Y ESTILO DEL TÍTULO */
 #titulo-carga {
-    font-size: 2.5em;
-    animation: slow-glitch 0.5s infinite alternate;
+    /* Estilo NEÓN llamativo para el título principal */
+    font-size: 3em; 
+    color: var(--neon-blue); 
+    text-shadow: var(--neon-shadow);
+    line-height: 1.2; 
+    
+    /* Aplicar la nueva animación */
+    animation: neon-glitch 4s infinite ease-in-out alternate;
+    
     transition: opacity 0.5s; 
-    text-align: center;
+    text-align: center; 
+}
+
+/* Media Query para pantallas pequeñas: el título debe ser más pequeño */
+@media (max-width: 600px) {
+    #titulo-carga {
+        font-size: 1.8em; 
+    }
 }
 
 #simulacion-carga {
