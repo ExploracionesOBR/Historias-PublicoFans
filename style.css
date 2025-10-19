@@ -175,6 +175,9 @@ body::before {
     
     transition: opacity 0.5s; 
     text-align: center; 
+    
+    /* AÑADIDO: Asegura que el texto no se salga de pantalla en anchos reducidos */
+    max-width: 90%; 
 }
 
 /* Media Query para pantallas pequeñas: el título debe ser más pequeño */
@@ -184,13 +187,16 @@ body::before {
     }
 }
 
+/* CLAVE: Ajuste para centrar el texto de la secuencia de carga */
 #simulacion-carga {
     white-space: pre-wrap;
     /* Aumento de tamaño para mejor visualización */
     font-size: 1.8em; 
     min-height: 35px; 
     opacity: 0; 
-    text-align: center;
+    text-align: center; /* CLAVE: Centrar el texto dentro del div */
+    max-width: 90%; /* Limita el ancho para evitar desbordamiento */
+    margin: 0 auto; /* CLAVE: Centra el div si es más pequeño que el contenedor */
 }
 
 .show-text {
