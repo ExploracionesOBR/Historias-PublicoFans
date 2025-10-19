@@ -368,3 +368,93 @@ textarea.input-terminal {
     color: var(--error-color);
     box-shadow: 0 0 10px var(--error-color);
 }
+/* --- ESTILOS DE VISTA DE ADMINISTRADOR (admin.html) --- */
+
+/* Adaptabilidad y Estructura del Layout */
+#admin-container {
+    width: 95%; /* Más ancho para aprovechar espacio */
+    max-width: 1400px;
+    margin: 40px auto;
+    padding: 20px;
+    /* Usa los estilos de terminal definidos en style.css */
+    border: 2px solid var(--text-color);
+    box-shadow: 0 0 5px var(--text-color);
+    background-color: transparent; /* Fondo transparente para ver la imagen de fondo */
+    animation: ghostly-pulse 5s infinite ease-in-out; /* Animación de terminal */
+}
+
+#data-panels {
+    display: flex;
+    gap: 20px;
+    flex-wrap: wrap; 
+}
+
+/* Estilo de los Paneles (Lista y Detalle) */
+#lista-nombres-panel, #historia-detalle-panel {
+    padding: 15px;
+    background-color: rgba(0, 0, 0, 0.8); /* Fondo oscuro semitransparente para legibilidad */
+    min-height: 500px;
+    box-sizing: border-box;
+    overflow-y: auto;
+    border: 1px solid var(--neon-blue); /* Borde neón */
+    box-shadow: 0 0 10px rgba(0, 224, 255, 0.5); /* Sombra neón */
+}
+
+#lista-nombres-panel {
+    flex: 1; 
+    min-width: 300px; 
+    max-width: 400px; /* Limita el ancho de la lista */
+}
+
+#historia-detalle-panel {
+    flex: 3; /* Ocupa la mayor parte del espacio */
+    min-width: 400px;
+}
+
+/* Estilo de la Lista de Nombres */
+#nombres-lista {
+    margin-top: 10px;
+}
+.nombre-registro {
+    padding: 8px 5px;
+    border-bottom: 1px dashed rgba(255, 0, 76, 0.4); /* Línea de error como separador */
+    cursor: pointer;
+    transition: background-color 0.2s, color 0.2s;
+    font-size: 1.1em;
+    word-break: break-word; /* Evita que nombres largos desborden */
+}
+.nombre-registro:hover {
+    background-color: rgba(0, 255, 65, 0.15);
+    color: var(--neon-blue);
+}
+.nombre-registro.selected {
+     background-color: var(--text-color); /* Fondo verde de terminal */
+     color: var(--bg-color); /* Texto negro */
+     box-shadow: 0 0 15px var(--text-color);
+}
+
+/* Estilo de la Historia (Modo Presentación de Texto Encriptado) */
+#historia-contenido {
+    white-space: pre-wrap; /* Mantiene el formato (saltos de línea) del texto original */
+    font-style: italic;
+    border-left: 5px solid var(--error-color); /* Borde de atención rojo/error */
+    padding-left: 20px;
+    margin-top: 20px;
+    min-height: 250px;
+    color: var(--text-color); /* Color por defecto, será cambiado por JS para el efecto */
+    overflow-wrap: break-word; /* Rompe palabras largas si es necesario */
+}
+
+/* Adaptabilidad para Móviles */
+@media (max-width: 768px) {
+    #data-panels {
+        flex-direction: column;
+    }
+    #lista-nombres-panel, #historia-detalle-panel {
+        min-width: 100%;
+        max-width: 100%;
+    }
+    #admin-container {
+        padding: 10px;
+    }
+}
