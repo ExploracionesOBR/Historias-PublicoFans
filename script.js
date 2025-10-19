@@ -215,15 +215,18 @@ if (formulario) {
         if (guardarBtn) guardarBtn.disabled = true;
         if (mensajeEstado) mensajeEstado.textContent = "Procesando el envío..."; 
 
+        // Creamos FormData para la recolección de datos
         const formData = new FormData(formulario);
         
         // Estructurar los datos para que coincidan con las columnas de Google Sheets
+        // ** CLAVE: Extraer el valor de los campos por su nombre completo (data[nombre], data[historia])
         const dataToSend = {};
 
         // Mapeo explícito a las columnas de la tabla (Nombre y Historia)
-        dataToSend["Nombre"] = formData.get("data[nombre]");
+        dataToSend["Nombre"] = formData.get("data[nombre]"); 
         dataToSend["Historia"] = formData.get("data[historia]");
         
+        // SheetDB espera un objeto "data" conteniendo el registro a insertar
         const payload = JSON.stringify({ data: dataToSend });
         
         console.log("Intentando enviar datos:", payload); 
@@ -254,7 +257,8 @@ if (formulario) {
                 // ERROR DE API (Ejemplo: campos faltantes o error de formato de SheetDB)
                 if (displayCronometro) displayCronometro.textContent = "ERROR DE REGISTRO.";
                 console.error('Respuesta de SheetDB fallida:', data);
-                initiateShutdown("Fallo al guardar. La base de datos rechazó el testimonio. Revisa el formato o la configuración de SheetDB.");
+                // Mensaje de error más detallado
+                initiateShutdown("Fallo al guardar. La base de datos rechazó el testimonio. Revisa la configuración de SheetDB o los nombres de las columnas ('Nombre' e 'Historia').");
             }
         })
         .catch(error => {
@@ -262,7 +266,8 @@ if (formulario) {
             if (displayCronometro) displayCronometro.textContent = "FALLA EN LA RED CREADA";
             console.error('Error de red o procesamiento:', error);
             
-            initiateShutdown("Falla de conexión o de datos. Revisa la URL del API de SheetDB o tu conexión a internet. Intenta de nuevo.");
+            // Mensaje de error más detallado
+            initiateShutdown("Falla de conexión o de datos. Revisa que la URL de SheetDB sea correcta y que tu hoja de cálculo tenga las columnas 'Nombre' e 'Historia'. Intenta de nuevo.");
         });
     });
 }
