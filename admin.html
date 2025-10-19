@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Portal de Control - Exploraciones OBR</title>
+    <link rel="stylesheet" href="style.css"> 
+    
+    </head>
+<body>
+
+    <div id="admin-container">
+        <h1 class="header-glitch" style="font-size: 3em;">PORTAL DE CONTROL (ADMIN) <span style="font-size: 0.5em; color: var(--neon-blue);">| EXPLORACIONES OBR</span></h1>
+        
+        <p class="instrucciones" style="color: var(--error-color);">// ADVERTENCIA: Acceso restringido. Datos sensibles del portal. Conexión inestable. //</p>
+
+        <div id="data-panels">
+            <div id="lista-nombres-panel">
+                <label for="buscar-nombre" class="glitch-label" style="font-size: 1.2em;">> TERMINAL DE BÚSQUEDA <span style="color: var(--error-color);">&#9612;</span></label>
+                <input type="text" id="buscar-nombre" class="input-terminal" placeholder="Buscar por Nombre...">
+                
+                <h3 style="color: var(--neon-blue); margin-top: 20px; border-bottom: 1px solid var(--neon-blue); padding-bottom: 5px;">[ REGISTROS ENCONTRADOS ]</h3>
+                <div id="nombres-lista">
+                    <p style="text-align: center;">Cargando registros del archivo...</p>
+                </div>
+            </div>
+
+            <div id="historia-detalle-panel">
+                <h2 style="color: var(--error-color); border-bottom: 3px solid var(--error-color);" id="detalle-titulo">>>> [ TESTIMONIO ENCRIPTADO SELECCIONADO ] <<<</h2>
+                
+                <p style="font-size: 1.2em; color: var(--neon-blue); margin-top: 15px;">** NOMBRE DEL ESCENCIALISTA **: <span id="detalle-nombre" style="color: var(--text-color);">---</span></p>
+                
+                <label class="glitch-label" style="margin-top: 30px; font-size: 1.4em;">[ CONTENIDO DEL ENCUENTRO ]</label>
+                <div id="historia-contenido">
+                    <p style="color: var(--error-color);">Esperando la selección de un registro de la lista de la izquierda para desencriptar el testimonio. La transferencia puede ser lenta...</p>
+                </div>
+            </div>
+        </div>
+        
+    </div>
+    
+    <script src="script.js"></script>
+</body>
+</html>
