@@ -271,14 +271,135 @@ if (formulario) {
         });
     });
 }
+// --- LÓGICA ESPECÍFICA PARA LA VISTA DE ADMINISTRADOR (AÑADIR AQUÍ) ---
 
+const nombresLista = document.getElementById('nombres-lista');
+const buscarInput = document.getElementById('buscar-nombre');
+const detalleNombre = document.getElementById('detalle-nombre');
+const detalleTitulo = document.getElementById('detalle-titulo');
+const historiaContenido = document.getElementById('historia-contenido');
 
-// FASE 1: Inicia el flujo al cargar la ventana
-window.onload = () => {
-    // Esconde el formulario y el logo al inicio
-    if (contenedorFormulario) contenedorFormulario.style.display = 'none'; 
-    if (logoEntrada) logoEntrada.style.display = 'none'; 
+let todosLosRegistros = []; // Almacena todos los datos obtenidos
+
+/**
+ * Función para obtener todos los registros de SheetDB.
+ */
+function obtenerRegistrosAdmin() {
+    if (!nombresLista) return; 
+
+    nombresLista.innerHTML = '<p style="text-align: center;">Accediendo a la base de datos...</p>';
+
+    // La misma URL de FORM_URL funciona para GET sin body
+    fetch(FORM_URL)
+        .then(response => {
+            if (!response.ok) {
+                throw new Error("Fallo al obtener los datos. Error HTTP " + response.status);
+            }
+            return response.json();
+        })
+        .then(data => {
+            // SheetDB devuelve la matriz de objetos
+            todosLosRegistros = data; 
+            mostrarListaNombres(todosLosRegistros);
+        })
+        .catch(error => {
+            console.error('Error al cargar registros:', error);
+            nombresLista.innerHTML = `<p style="color: var(--error-color); text-align: center;">ERROR DE CONEXIÓN: ${error.message}</p>`;
+        });
+}
+
+/**
+ * Muestra la lista de nombres o los filtra según el texto de búsqueda.
+ */
+function mostrarListaNombres(registros) {
+    if (!nombresLista) return;
+
+    if (registros.length === 0) {
+        nombresLista.innerHTML = '<p style="text-align: center; color: var(--error-color);">No hay registros en la base de datos.</p>';
+        return;
+    }
+
+    const filtro = buscarInput.value.toLowerCase();
+    const registrosFiltrados = registros.filter(reg => 
+        reg.Nombre && reg.Nombre.toLowerCase().includes(filtro)
+    );
+
+    nombresLista.innerHTML = ''; 
+
+    if (registrosFiltrados.length === 0) {
+        nombresLista.innerHTML = '<p style="text-align: center;">No se encontraron nombres que coincidan.</p>';
+        return;
+    }
+
+    registrosFiltrados.forEach(registro => {
+        const div = document.createElement('div');
+        div.classList.add('nombre-registro');
+        div.textContent = `> ${registro.Nombre}`;
+        div.onclick = () => seleccionarRegistro(registro, div);
+        nombresLista.appendChild(div);
+    });
+}
+
+/**
+ * Muestra el detalle de la Historia seleccionada (con efecto de máquina de escribir).
+ */
+function seleccionarRegistro(registro, elementoClicado) {
+    if (!detalleNombre || !historiaContenido || !detalleTitulo) return;
     
-    // Inicia la secuencia de mensajes de carga
-    mostrarMensaje(0);
+    // Quitar la clase 'selected' de todos los elementos
+    document.querySelectorAll('.nombre-registro').forEach(el => el.classList.remove('selected'));
+    
+    // Añadir la clase 'selected' al elemento clickeado
+    elementoClicado.classList.add('selected');
+
+    // Actualizar el panel de detalle
+    detalleTitulo.textContent = `TESTIMONIO DE ${registro.Nombre.toUpperCase()}`;
+    detalleNombre.textContent = registro.Nombre;
+    
+    // Simulación de escritura (efecto máquina de escribir)
+    historiaContenido.textContent = '';
+    historiaContenido.style.color = 'var(--text-color)';
+    
+    const textoCompleto = registro.Historia || "El testimonio fue encriptado o no se registró correctamente.";
+    let i = 0;
+    
+    function typeWriter() {
+        if (i < textoCompleto.length) {
+            historiaContenido.textContent += textoCompleto.charAt(i);
+            i++;
+            setTimeout(typeWriter, 20); // Velocidad de tipeo
+        } else {
+             // Texto finalizado
+             historiaContenido.style.color = 'var(--neon-blue)';
+        }
+    }
+    
+    typeWriter();
+}
+
+// 1. Añadir el evento de búsqueda
+if (buscarInput) {
+    buscarInput.addEventListener('keyup', () => {
+        mostrarListaNombres(todosLosRegistros);
+    });
+}
+// REEMPLAZO: Esta nueva versión maneja index.html y admin.html
+window.onload = () => {
+    // 1. Obtiene las referencias para la lógica de dos páginas
+    const nombresLista = document.getElementById('nombres-lista');
+    
+    // Lógica para index.html (Portal de Registro)
+    if (contenedorFormulario) {
+        // Esconde el formulario y el logo al inicio
+        if (contenedorFormulario) contenedorFormulario.style.display = 'none'; 
+        if (logoEntrada) logoEntrada.style.display = 'none'; 
+        
+        // Inicia la secuencia de mensajes de carga
+        mostrarMensaje(0);
+    } 
+    
+    // Lógica para admin.html (Portal de Control)
+    if (nombresLista) {
+        obtenerRegistrosAdmin();
+    }
 };
