@@ -1,6 +1,6 @@
 // ** CONFIGURACIÓN CLAVE: REEMPLAZA ESTA URL CON TU API DE SHEETDB **
 const FORM_URL = 'https://sheetdb.io/api/v1/txamjw05ii0f9'; 
-// Elementos del DOM
+// Elementos del DOM (index.html)
 const terminalContainer = document.querySelector('.terminal-container'); 
 const tituloCarga = document.getElementById('titulo-carga');
 const cargaTexto = document.getElementById('carga-texto');
@@ -15,7 +15,7 @@ const guardarBtn = document.getElementById('guardar-btn');
 const logoEntrada = document.getElementById('logo-entrada'); 
 const mensajeEstado = document.getElementById('mensaje-estado'); 
 
-// --- NUEVO ELEMENTO: Contenedor para mensajes a pantalla completa (Asegura su existencia) ---
+// --- Contenedor para mensajes a pantalla completa (Apagado) ---
 let fullScreenMessageContainer = document.getElementById('full-screen-overlay');
 if (!fullScreenMessageContainer) {
     fullScreenMessageContainer = document.createElement('div');
@@ -56,7 +56,7 @@ function initiateShutdown(message, showReconnectButton = true) {
     }, 600); 
 }
 
-// --- B. CRONÓMETRO Y FUNCIÓN DE ELIMINACIÓN ---
+// --- CRONÓMETRO Y FUNCIÓN DE ELIMINACIÓN ---
 
 function actualizarCronometro() {
     if (tiempoRestanteActual <= 0) {
@@ -101,79 +101,55 @@ function iniciarCronometro(segundosIniciales = 180) { // 180 SEGUNDOS (3 MINUTOS
     
     if (guardarBtn) guardarBtn.disabled = false;
 
-    // Llama a actualizarCronometro inmediatamente para iniciar el conteo
     actualizarCronometro(); 
     intervaloCronometro = setInterval(actualizarCronometro, 1000);
 }
 
 
-// --- A. SIMULACIÓN DE CARGA TEMÁTICA (4 FASES) ---
-// FASE 1: Textos de validación (Inicia con Conectado...)
+// --- SIMULACIÓN DE CARGA TEMÁTICA ---
 const secuencia = [
-    { text: "Conectado..." }, // Paso 1
+    { text: "Conectado..." }, 
     { text: "Revisando el nivel fantasmal..." },
     { text: "Purificando el ambiente..." },
-    { text: "Conectado. Acceso concedido." } // Paso final de texto
+    { text: "Conectado. Acceso concedido." } 
 ];
 
-/**
- * FASE 4: Inicia la animación de espiral (revelación final).
- */
 function iniciarAperturaEspiral() {
-    // 1. Ocultar el texto final de conexión
     if (tituloCarga) tituloCarga.style.opacity = 0;
     if (simulacionCarga) simulacionCarga.style.display = 'none';
 
-    // 2. MUESTRA el título grande (BIENVENIDO AL PORTAL...)
     if (tituloCarga) {
-        // **CORRECCIÓN CLAVE: INSERCIÓN DE <BR> PARA PANTALLAS MÓVILES**
         tituloCarga.innerHTML = "BIENVENIDO AL PORTAL DE<br>EXPLORACIONES OBR";
         tituloCarga.style.opacity = 1;
         tituloCarga.style.display = 'block'; 
     }
 
-    // 3. Iniciar la animación de espiral (duración CSS: 3s)
     if (pantallaCarga) pantallaCarga.classList.add('portal-animation-start'); 
     
-    // 4. Esperar a que la espiral termine (3500ms para seguridad)
     setTimeout(() => {
-        // Oculta la capa de carga y MUESTRA el formulario
         if (pantallaCarga) pantallaCarga.style.display = 'none';
         if (contenedorFormulario) contenedorFormulario.style.display = 'block'; 
-        iniciarCronometro(180); // Inicia con 3 minutos
+        iniciarCronometro(180); 
     }, 3500); 
 }
 
-
-/**
- * FASE 3: Inicia la animación de zoom del logo.
- */
 function iniciarAnimacionLogo() {
-    // 1. Ocultar textos de carga
     if (tituloCarga) tituloCarga.style.opacity = 0;
     if (simulacionCarga) simulacionCarga.style.display = 'none';
 
-    // 2. Mostrar y animar el logo (duración de la animación CSS: 3s)
     if (logoEntrada) {
         logoEntrada.style.display = 'block';
         logoEntrada.classList.add('logo-animating'); 
     }
     
-    // 3. Esperar a que la animación del logo termine (3000ms)
     setTimeout(() => {
-        // 4. Oculta el logo y pasa a mostrar el título y la espiral
         if (logoEntrada) logoEntrada.style.display = 'none'; 
         iniciarAperturaEspiral();
     }, 3000); 
 }
 
-
-/**
- * FASE 2: Muestra los mensajes de validación.
- */
 function mostrarMensaje(index) {
     if (index >= secuencia.length) {
-        // Al terminar la secuencia de texto, pasa a la fase del Logo
         iniciarAnimacionLogo();
         return;
     }
@@ -185,7 +161,6 @@ function mostrarMensaje(index) {
         if (simulacionCarga) simulacionCarga.classList.remove('show-text');
         
         setTimeout(() => {
-            // Aseguramos que el titulo principal esté oculto
             if (tituloCarga) tituloCarga.style.opacity = 0; 
             
             if (paso.text !== "" && cargaTexto) {
@@ -203,34 +178,25 @@ function mostrarMensaje(index) {
 }
 
 
-// --- C. ENVÍO DE DATOS A SHEETDB ---
+// --- ENVÍO DE DATOS A SHEETDB ---
 
 if (formulario) {
     formulario.addEventListener('submit', function(e) {
         e.preventDefault(); 
         
-        // Desactivar UI y mostrar estado
         if (intervaloCronometro) clearInterval(intervaloCronometro);
         if (displayCronometro) displayCronometro.textContent = "ENCRIPTANDO REGISTRO...";
         if (guardarBtn) guardarBtn.disabled = true;
         if (mensajeEstado) mensajeEstado.textContent = "Procesando el envío..."; 
 
-        // Creamos FormData para la recolección de datos
         const formData = new FormData(formulario);
-        
-        // Estructurar los datos para que coincidan con las columnas de Google Sheets
         const dataToSend = {};
-
-        // Mapeo explícito a las columnas de la tabla (Nombre y Historia)
-        // ** CLAVE: Obtener los valores correctos por su nombre completo
+        
         dataToSend["Nombre"] = formData.get("data[nombre]"); 
         dataToSend["Historia"] = formData.get("data[historia]");
         
-        // SheetDB espera un objeto "data" conteniendo el registro a insertar
         const payload = JSON.stringify({ data: dataToSend });
         
-        console.log("Intentando enviar datos:", payload); 
-
         fetch(FORM_URL, {
             method: 'POST',
             headers: {
@@ -254,19 +220,14 @@ if (formulario) {
                     false 
                 ); 
             } else {
-                // ERROR DE API (Ejemplo: campos faltantes o error de formato de SheetDB)
+                // ERROR DE API
                 if (displayCronometro) displayCronometro.textContent = "ERROR DE REGISTRO.";
-                console.error('Respuesta de SheetDB fallida:', data);
-                // Mensaje de error más detallado
                 initiateShutdown("Fallo al guardar. La base de datos rechazó el testimonio. Revisa la configuración de SheetDB o los nombres de las columnas ('Nombre' e 'Historia').");
             }
         })
         .catch(error => {
             // FALLA DE RED O ERROR HTTP
             if (displayCronometro) displayCronometro.textContent = "FALLA EN LA RED CREADA";
-            console.error('Error de red o procesamiento:', error);
-            
-            // Mensaje de error más detallado
             initiateShutdown("Falla de conexión o de datos. Revisa que la URL de SheetDB sea correcta y que tu hoja de cálculo tenga las columnas 'Nombre' e 'Historia'. Intenta de nuevo.");
         });
     });
@@ -281,8 +242,8 @@ const detalleNombre = document.getElementById('detalle-nombre');
 const detalleTitulo = document.getElementById('detalle-titulo');
 const historiaContenido = document.getElementById('historia-contenido');
 
-let todosLosRegistros = []; // Almacena todos los datos obtenidos
-let currentTypingInterval; // <--- VARIABLE DE CONTROL DE ANIMACIÓN (CORRECCIÓN DOBLE CLIC)
+let todosLosRegistros = []; 
+let currentTypingInterval; // Variable de control de animación (CORRECCIÓN DOBLE CLIC)
 
 /**
  * Función para obtener todos los registros de SheetDB.
@@ -292,7 +253,6 @@ function obtenerRegistrosAdmin() {
 
     nombresLista.innerHTML = '<p style="text-align: center;">Accediendo a la base de datos...</p>';
 
-    // La misma URL de FORM_URL funciona para GET sin body
     fetch(FORM_URL)
         .then(response => {
             if (!response.ok) {
@@ -301,12 +261,10 @@ function obtenerRegistrosAdmin() {
             return response.json();
         })
         .then(data => {
-            // SheetDB devuelve la matriz de objetos
             todosLosRegistros = data; 
             mostrarListaNombres(todosLosRegistros);
         })
         .catch(error => {
-            console.error('Error al cargar registros:', error);
             nombresLista.innerHTML = `<p style="color: var(--error-color); text-align: center;">ERROR DE CONEXIÓN: ${error.message}</p>`;
         });
 }
@@ -345,12 +303,11 @@ function mostrarListaNombres(registros) {
 
 /**
  * Muestra el detalle de la Historia seleccionada (con efecto de máquina de escribir).
- * CORRECCIÓN: Se detiene cualquier animación de escritura previa (doble clic).
  */
 function seleccionarRegistro(registro, elementoClicado) {
     if (!detalleNombre || !historiaContenido || !detalleTitulo) return;
     
-    // *** CORRECCIÓN CLAVE: Detener la animación anterior para evitar duplicidad ***
+    // DETENER animación anterior (CORRECCIÓN DOBLE CLIC)
     if (currentTypingInterval) {
         clearTimeout(currentTypingInterval);
     }
@@ -369,7 +326,6 @@ function seleccionarRegistro(registro, elementoClicado) {
     historiaContenido.textContent = '';
     historiaContenido.style.color = 'var(--text-color)';
     
-    // Texto inicial para la simulación
     const textoCompleto = registro.Historia || "El testimonio fue encriptado o no se registró correctamente.";
     let i = 0;
     
@@ -377,12 +333,12 @@ function seleccionarRegistro(registro, elementoClicado) {
         if (i < textoCompleto.length) {
             historiaContenido.textContent += textoCompleto.charAt(i);
             i++;
-            // *** ALMACENAR el ID del timeout ***
-            currentTypingInterval = setTimeout(typeWriter, 20); // Velocidad de tipeo
+            // ALMACENAR el ID del timeout
+            currentTypingInterval = setTimeout(typeWriter, 20); 
         } else {
              // Texto finalizado
              historiaContenido.style.color = 'var(--neon-blue)';
-             currentTypingInterval = null; // Limpiar la variable al finalizar
+             currentTypingInterval = null; 
         }
     }
     
@@ -400,8 +356,6 @@ if (buscarInput) {
 // FASE 1: Inicia el flujo al cargar la ventana
 // Manejador que distingue entre index.html y admin.html
 window.onload = () => {
-    // 1. Obtiene las referencias para la lógica de dos páginas
-    const nombresLista = document.getElementById('nombres-lista');
     
     // Lógica para index.html (Portal de Registro)
     if (contenedorFormulario) {
