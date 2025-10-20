@@ -192,6 +192,7 @@ if (formulario) {
         const formData = new FormData(formulario);
         const dataToSend = {};
         
+        // Mapeo explícito a las columnas de la tabla (Nombre y Historia)
         dataToSend["Nombre"] = formData.get("data[nombre]"); 
         dataToSend["Historia"] = formData.get("data[historia]");
         
@@ -238,7 +239,6 @@ if (formulario) {
 
 const nombresLista = document.getElementById('nombres-lista');
 const buscarInput = document.getElementById('buscar-nombre');
-const detalleNombre = document.getElementById('detalle-nombre');
 const detalleTitulo = document.getElementById('detalle-titulo');
 const historiaContenido = document.getElementById('historia-contenido');
 
@@ -305,7 +305,7 @@ function mostrarListaNombres(registros) {
  * Muestra el detalle de la Historia seleccionada (con efecto de máquina de escribir).
  */
 function seleccionarRegistro(registro, elementoClicado) {
-    if (!detalleNombre || !historiaContenido || !detalleTitulo) return;
+    if (!historiaContenido || !detalleTitulo) return;
     
     // DETENER animación anterior (CORRECCIÓN DOBLE CLIC)
     if (currentTypingInterval) {
@@ -318,9 +318,10 @@ function seleccionarRegistro(registro, elementoClicado) {
     // Añadir la clase 'selected' al elemento clickeado
     elementoClicado.classList.add('selected');
 
-    // Actualizar el panel de detalle (Nombre del escritor en mayúsculas)
-    detalleTitulo.textContent = `TESTIMONIO DE ${registro.Nombre.toUpperCase()}`;
-    detalleNombre.textContent = registro.Nombre.toUpperCase();
+    // Usar innerHTML para diferenciar color de "TESTIMONIO DE"
+    const nombreEnMayusculas = registro.Nombre.toUpperCase();
+    const tituloEstatico = `<span style="color: var(--neon-blue);">TESTIMONIO DE </span>`; // Color diferente
+    detalleTitulo.innerHTML = `>>> [ ${tituloEstatico}${nombreEnMayusculas} ] <<<`;
     
     // Simulación de escritura (efecto máquina de escribir)
     historiaContenido.textContent = '';
