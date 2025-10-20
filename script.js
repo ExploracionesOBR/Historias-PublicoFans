@@ -219,10 +219,10 @@ if (formulario) {
         const formData = new FormData(formulario);
         
         // Estructurar los datos para que coincidan con las columnas de Google Sheets
-        // ** CLAVE: Extraer el valor de los campos por su nombre completo (data[nombre], data[historia])
         const dataToSend = {};
 
         // Mapeo explícito a las columnas de la tabla (Nombre y Historia)
+        // ** CLAVE: Obtener los valores correctos por su nombre completo
         dataToSend["Nombre"] = formData.get("data[nombre]"); 
         dataToSend["Historia"] = formData.get("data[historia]");
         
@@ -271,7 +271,9 @@ if (formulario) {
         });
     });
 }
-// --- LÓGICA ESPECÍFICA PARA LA VISTA DE ADMINISTRADOR (AÑADIR AQUÍ) ---
+
+
+// --- LÓGICA ESPECÍFICA PARA LA VISTA DE ADMINISTRADOR ---
 
 const nombresLista = document.getElementById('nombres-lista');
 const buscarInput = document.getElementById('buscar-nombre');
@@ -280,6 +282,7 @@ const detalleTitulo = document.getElementById('detalle-titulo');
 const historiaContenido = document.getElementById('historia-contenido');
 
 let todosLosRegistros = []; // Almacena todos los datos obtenidos
+let currentTypingInterval; // <--- VARIABLE DE CONTROL DE ANIMACIÓN (CORRECCIÓN DOBLE CLIC)
 
 /**
  * Función para obtener todos los registros de SheetDB.
@@ -342,9 +345,15 @@ function mostrarListaNombres(registros) {
 
 /**
  * Muestra el detalle de la Historia seleccionada (con efecto de máquina de escribir).
+ * CORRECCIÓN: Se detiene cualquier animación de escritura previa (doble clic).
  */
 function seleccionarRegistro(registro, elementoClicado) {
     if (!detalleNombre || !historiaContenido || !detalleTitulo) return;
+    
+    // *** CORRECCIÓN CLAVE: Detener la animación anterior para evitar duplicidad ***
+    if (currentTypingInterval) {
+        clearTimeout(currentTypingInterval);
+    }
     
     // Quitar la clase 'selected' de todos los elementos
     document.querySelectorAll('.nombre-registro').forEach(el => el.classList.remove('selected'));
@@ -352,14 +361,15 @@ function seleccionarRegistro(registro, elementoClicado) {
     // Añadir la clase 'selected' al elemento clickeado
     elementoClicado.classList.add('selected');
 
-    // Actualizar el panel de detalle
+    // Actualizar el panel de detalle (Nombre del escritor en mayúsculas)
     detalleTitulo.textContent = `TESTIMONIO DE ${registro.Nombre.toUpperCase()}`;
-    detalleNombre.textContent = registro.Nombre;
+    detalleNombre.textContent = registro.Nombre.toUpperCase();
     
     // Simulación de escritura (efecto máquina de escribir)
     historiaContenido.textContent = '';
     historiaContenido.style.color = 'var(--text-color)';
     
+    // Texto inicial para la simulación
     const textoCompleto = registro.Historia || "El testimonio fue encriptado o no se registró correctamente.";
     let i = 0;
     
@@ -367,13 +377,16 @@ function seleccionarRegistro(registro, elementoClicado) {
         if (i < textoCompleto.length) {
             historiaContenido.textContent += textoCompleto.charAt(i);
             i++;
-            setTimeout(typeWriter, 20); // Velocidad de tipeo
+            // *** ALMACENAR el ID del timeout ***
+            currentTypingInterval = setTimeout(typeWriter, 20); // Velocidad de tipeo
         } else {
              // Texto finalizado
              historiaContenido.style.color = 'var(--neon-blue)';
+             currentTypingInterval = null; // Limpiar la variable al finalizar
         }
     }
     
+    // Iniciar la nueva animación
     typeWriter();
 }
 
@@ -383,19 +396,20 @@ if (buscarInput) {
         mostrarListaNombres(todosLosRegistros);
     });
 }
-// REEMPLAZO: Esta nueva versión maneja index.html y admin.html
+
+// FASE 1: Inicia el flujo al cargar la ventana
+// Manejador que distingue entre index.html y admin.html
 window.onload = () => {
     // 1. Obtiene las referencias para la lógica de dos páginas
     const nombresLista = document.getElementById('nombres-lista');
     
     // Lógica para index.html (Portal de Registro)
     if (contenedorFormulario) {
-        // Esconde el formulario y el logo al inicio
+        const logoEntrada = document.getElementById('logo-entrada'); 
         if (contenedorFormulario) contenedorFormulario.style.display = 'none'; 
         if (logoEntrada) logoEntrada.style.display = 'none'; 
-        
         // Inicia la secuencia de mensajes de carga
-        mostrarMensaje(0);
+        mostrarMensaje(0); 
     } 
     
     // Lógica para admin.html (Portal de Control)
