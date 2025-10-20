@@ -6,6 +6,8 @@
     --font-family: 'Courier New', monospace;
     --neon-blue: #00e0ff;
     --neon-shadow: 0 0 5px var(--neon-blue), 0 0 10px var(--neon-blue);
+    /* Nuevo color para el fondo tenebroso */
+    --spooky-dark: #0a0a0a; 
 }
 
 /* --- ANIMACIONES --- */
@@ -17,7 +19,6 @@
     54% { color: var(--text-color); }
 }
 
-/* 1. Logo Zoom (Duración total: 3s) */
 @keyframes logo-zoom-fade {
     0% { transform: scale(0.1); opacity: 0; }
     30% { transform: scale(1.1); opacity: 1; }
@@ -25,7 +26,6 @@
     100% { transform: scale(2.0); opacity: 0; }
 }
 
-/* 2. Apertura Espiral (Duración total: 3s) */
 @keyframes portal-open {
     0% { 
         clip-path: circle(0% at center);
@@ -90,22 +90,52 @@
     }
 }
 
-/* --- NUEVA ANIMACIÓN: CORTOCIRCUITO ELÉCTRICO (PARA EL ADMIN) --- */
-@keyframes electrical-glitch-border {
-    0% { box-shadow: 0 0 10px var(--text-color), 0 0 0 2px var(--text-color); }
-    5% { box-shadow: 0 0 15px var(--error-color), 0 0 0 3px var(--neon-blue); }
-    10% { box-shadow: 0 0 10px var(--neon-blue), 0 0 0 2px var(--error-color); }
-    12% { box-shadow: 0 0 10px var(--text-color); }
-    30% { box-shadow: 0 0 10px var(--text-color), 0 0 0 2px var(--text-color); }
-    40% { box-shadow: 0 0 15px var(--text-color), 0 0 0 2px var(--error-color); }
-    45% { box-shadow: 0 0 10px var(--neon-blue); }
-    100% { box-shadow: 0 0 10px var(--text-color), 0 0 0 2px var(--text-color); }
+/* --- NUEVA ANIMACIÓN: RAYOS ELÉCTRICOS HACIA LOS LADOS --- */
+@keyframes ray-glitch-animation {
+    0%, 100% { 
+        box-shadow: 
+            0 0 15px var(--neon-blue),
+            0 0 0 0 rgba(0, 224, 255, 0); /* Base */
+    }
+    5% { 
+        box-shadow: 
+            0 0 20px var(--error-color),
+            -200px 0 0 8px var(--error-color), /* Rayo Izquierda */
+            200px 0 0 8px var(--error-color); /* Rayo Derecha */
+    }
+    10% { 
+        box-shadow: 
+            0 0 15px var(--text-color),
+            -150px 0 0 5px var(--neon-blue),
+            150px 0 0 5px var(--neon-blue); 
+    }
+    15% {
+         box-shadow: 
+            0 0 15px var(--neon-blue),
+            0 0 0 0 rgba(0, 224, 255, 0);
+    }
+    18% { 
+        box-shadow: 
+            0 0 30px var(--text-color),
+            -350px 0 0 10px var(--text-color), /* Rayo Largo y dramático */
+            350px 0 0 10px var(--text-color);
+    }
+    20% { 
+        box-shadow: 
+            0 0 15px var(--neon-blue),
+            0 0 0 0 rgba(0, 224, 255, 0);
+    }
+    100% {
+        box-shadow: 
+            0 0 15px var(--neon-blue),
+            0 0 0 0 rgba(0, 224, 255, 0);
+    }
 }
 
 
-/* * CUERPO Y FONDO */
+/* * CUERPO Y FONDO (Actualizado a fondo oscuro sólido) */
 body {
-    background-color: #0d0d0d;
+    background-color: var(--spooky-dark);
     color: var(--text-color);
     font-family: var(--font-family);
     display: flex;
@@ -116,13 +146,12 @@ body {
     padding: 20px 10px; 
     overflow-y: auto; 
     position: relative; 
-    background-image: url('https://exploracionesobr.github.io/Historias-PublicoFans/fondo_terror.jpg'); 
-    background-size: cover; 
-    background-position: center center; 
-    background-repeat: no-repeat;
-    background-attachment: fixed; 
+    /* Fondo limpio y oscuro */
+    background-image: none; 
+    background-attachment: scroll; 
 }
 
+/* Asegura que el fondo negro cubra todo y elimina la opacidad de la imagen */
 body::before {
     content: "";
     position: fixed; 
@@ -130,8 +159,9 @@ body::before {
     left: 0;
     width: 100%;
     height: 100%;
-    background-color: rgba(0, 0, 0, 0.7); 
+    background-color: var(--spooky-dark); 
     z-index: -1; 
+    opacity: 1;
 }
 
 /* * PANTALLA DE CARGA */
@@ -214,7 +244,6 @@ body::before {
     box-sizing: border-box; 
     margin-bottom: 20px;
 }
-
 /* Control de visibilidad del formulario */
 #contenedor-formulario {
     opacity: 0;
@@ -238,18 +267,15 @@ body::before {
     margin-bottom: 20px;
     animation: slow-glitch 0.5s infinite alternate;
 }
-
 label, .instrucciones {
     display: block;
     margin-top: 15px;
     margin-bottom: 5px;
     color: var(--text-color);
 }
-
 .glitch-label {
     animation: blink 2s step-end infinite;
 }
-
 .input-terminal {
     width: 100%;
     padding: 10px;
@@ -282,7 +308,6 @@ textarea.input-terminal {
     font-size: 3.5em !important;
     animation: slow-glitch 0.2s infinite alternate;
 }
-
 .btn-terminal {
     background-color: var(--text-color);
     color: var(--bg-color);
@@ -349,7 +374,6 @@ textarea.input-terminal {
 
 /* --- ESTILOS DE VISTA DE ADMINISTRADOR (admin.html) --- */
 
-/* Adaptabilidad y Estructura del Layout */
 #admin-container {
     width: 95%; 
     max-width: 1400px;
@@ -358,14 +382,14 @@ textarea.input-terminal {
     border: 2px solid var(--text-color);
     box-sizing: border-box; 
     background-color: transparent; 
-    /* Aplicar el pulso y el nuevo glitch eléctrico */
-    animation: ghostly-pulse 5s infinite ease-in-out, electrical-glitch-border 0.5s infinite alternate; 
+    /* **APLICACIÓN DE LA ANIMACIÓN DE RAYOS Y PULSO** */
+    animation: ghostly-pulse 5s infinite ease-in-out, ray-glitch-animation 1s infinite alternate; 
 }
 
-/* Legibilidad y estilo dramático para la Advertencia */
+/* MENSAJE DE ADVERTENCIA REDUCIDO */
 #advertencia-admin {
     color: var(--error-color) !important;
-    font-size: 1.5em !important;
+    font-size: 1.2em !important; 
     text-align: center;
     padding: 10px;
     border: 1px dashed var(--error-color);
@@ -377,7 +401,7 @@ textarea.input-terminal {
 
 /* Forzar mayúsculas en los títulos y etiquetas */
 #registros-encontrados-titulo, 
-#nombre-escritor-label {
+#historia-label {
     text-transform: uppercase;
 }
 
@@ -393,12 +417,21 @@ textarea.input-terminal {
 /* Estilo para los paneles (ajustado para mejor contraste) */
 #lista-nombres-panel, #historia-detalle-panel {
     padding: 15px;
-    background-color: rgba(0, 0, 0, 0.9); /* Más oscuro para mejor contraste */
+    background-color: rgba(0, 0, 0, 0.9);
     min-height: 500px;
     box-sizing: border-box;
     overflow-y: auto;
     border: 1px solid var(--neon-blue);
     box-shadow: 0 0 10px rgba(0, 224, 255, 0.5);
+}
+
+/* Estilo de Malla Detrás del Contenido Detalle */
+#historia-detalle-panel {
+    background-image: linear-gradient(0deg, transparent 95%, rgba(0, 255, 65, 0.1) 100%),
+                      linear-gradient(90deg, transparent 95%, rgba(0, 255, 65, 0.1) 100%);
+    background-size: 20px 20px;
+    background-repeat: repeat;
+    background-attachment: local;
 }
 
 /* Estilos de layout de data-panels */
@@ -417,16 +450,13 @@ textarea.input-terminal {
     min-width: 400px;
 }
 
-/* Estilo de la Lista de Nombres */
-#nombres-lista {
-    margin-top: 10px;
-}
+/* Aumento de Tamaño de Texto en la Lista */
 .nombre-registro {
     padding: 8px 5px;
     border-bottom: 1px dashed rgba(255, 0, 76, 0.4); 
     cursor: pointer;
     transition: background-color 0.2s, color 0.2s;
-    font-size: 1.1em;
+    font-size: 1.2em; 
     word-break: break-word; 
 }
 .nombre-registro:hover {
@@ -449,6 +479,7 @@ textarea.input-terminal {
     min-height: 250px;
     color: var(--text-color); 
     overflow-wrap: break-word; 
+    font-size: 1.1em; 
 }
 
 /* Adaptabilidad para Móviles */
