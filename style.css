@@ -4,7 +4,6 @@
     --text-color: #00ff41;
     --error-color: #ff004c;
     --font-family: 'Courier New', monospace;
-    /* Nuevo color más brillante para el título */
     --neon-blue: #00e0ff;
     --neon-shadow: 0 0 5px var(--neon-blue), 0 0 10px var(--neon-blue);
 }
@@ -63,7 +62,6 @@
     100% { transform: scaleY(0.05) translateY(0); opacity: 0; }
 }
 
-/* Animación Glitch más visible para el Título */
 @keyframes neon-glitch {
     0% {
         text-shadow: -2px -2px 0 var(--error-color), 2px 2px 0 var(--neon-blue);
@@ -92,6 +90,18 @@
     }
 }
 
+/* --- NUEVA ANIMACIÓN: CORTOCIRCUITO ELÉCTRICO (PARA EL ADMIN) --- */
+@keyframes electrical-glitch-border {
+    0% { box-shadow: 0 0 10px var(--text-color), 0 0 0 2px var(--text-color); }
+    5% { box-shadow: 0 0 15px var(--error-color), 0 0 0 3px var(--neon-blue); }
+    10% { box-shadow: 0 0 10px var(--neon-blue), 0 0 0 2px var(--error-color); }
+    12% { box-shadow: 0 0 10px var(--text-color); }
+    30% { box-shadow: 0 0 10px var(--text-color), 0 0 0 2px var(--text-color); }
+    40% { box-shadow: 0 0 15px var(--text-color), 0 0 0 2px var(--error-color); }
+    45% { box-shadow: 0 0 10px var(--neon-blue); }
+    100% { box-shadow: 0 0 10px var(--text-color), 0 0 0 2px var(--text-color); }
+}
+
 
 /* * CUERPO Y FONDO */
 body {
@@ -106,7 +116,6 @@ body {
     padding: 20px 10px; 
     overflow-y: auto; 
     position: relative; 
-    /* Ruta del fondo */
     background-image: url('https://exploracionesobr.github.io/Historias-PublicoFans/fondo_terror.jpg'); 
     background-size: cover; 
     background-position: center center; 
@@ -121,12 +130,11 @@ body::before {
     left: 0;
     width: 100%;
     height: 100%;
-    /* Capa de oscuridad (Opacidad reducida a 0.7) */
     background-color: rgba(0, 0, 0, 0.7); 
     z-index: -1; 
 }
 
-/* * PANTALLA DE CARGA (CAPA NEGRA SUPERIOR) */
+/* * PANTALLA DE CARGA */
 #pantalla-carga {
     position: fixed;
     top: 0;
@@ -134,15 +142,13 @@ body::before {
     width: 100%;
     height: 100%;
     background-color: var(--bg-color); 
-    z-index: 100; /* Asegura que cubra todo */
+    z-index: 100;
     display: flex;
     flex-direction: column;
     justify-content: center;
     align-items: center;
     text-align: center;
 }
-
-/* Dispara la animación de espiral */
 .portal-animation-start {
     animation: portal-open 3s forwards; 
 }
@@ -156,89 +162,69 @@ body::before {
     transition: opacity 0.5s;
     transform: scale(0.1); 
 }
-
-/* Dispara la animación de zoom del logo */
 .logo-animating {
     animation: logo-zoom-fade 3s forwards; 
 }
 
-/* * TEXTOS DE CARGA - AUMENTO DE TAMAÑO Y ESTILO DEL TÍTULO */
+/* * TEXTOS DE CARGA */
 #titulo-carga {
-    /* Estilo NEÓN llamativo para el título principal */
     font-size: 3em; 
     color: var(--neon-blue); 
     text-shadow: var(--neon-shadow);
     line-height: 1.2; 
-    
-    /* Aplicar la nueva animación */
     animation: neon-glitch 4s infinite ease-in-out alternate;
-    
     transition: opacity 0.5s; 
     text-align: center; 
-    
-    /* AÑADIDO: Asegura que el texto no se salga de pantalla en anchos reducidos */
     max-width: 90%; 
 }
-
-/* Media Query para pantallas pequeñas: el título debe ser más pequeño */
 @media (max-width: 600px) {
     #titulo-carga {
         font-size: 1.8em; 
     }
 }
-
-/* CLAVE: Ajuste para centrar el texto de la secuencia de carga */
 #simulacion-carga {
     white-space: pre-wrap;
-    /* Aumento de tamaño para mejor visualización */
     font-size: 1.8em; 
     min-height: 35px; 
     opacity: 0; 
-    text-align: center; /* CLAVE: Centrar el texto dentro del div */
-    max-width: 90%; /* Limita el ancho para evitar desbordamiento */
-    margin: 0 auto; /* CLAVE: Centra el div si es más pequeño que el contenedor */
+    text-align: center;
+    max-width: 90%; 
+    margin: 0 auto;
 }
-
 .show-text {
     opacity: 1 !important;
     transition: opacity 0.5s;
     animation: blink 1s step-end infinite;
 }
-
 .line-start {
     color: var(--error-color);
 }
 
-/* * CONTENEDOR DEL FORMULARIO - ¡CORRECCIÓN DE FONDO! */
+/* * CONTENEDOR DEL FORMULARIO */
 .terminal-container {
     width: 100%; 
     max-width: 800px;
     border: 2px solid var(--text-color);
     padding: 20px 15px; 
     box-shadow: 0 0 5px var(--text-color);
-    /* TRANSPARENCIA TOTAL */
     background-color: transparent; 
     background-image: none;
-    
     animation: ghostly-pulse 5s infinite ease-in-out;
     transition: opacity 1s ease-out;
     box-sizing: border-box; 
     margin-bottom: 20px;
 }
 
-/* Control de visibilidad del formulario: empieza invisible e inactivo */
+/* Control de visibilidad del formulario */
 #contenedor-formulario {
     opacity: 0;
     pointer-events: none;
     transition: opacity 1s ease-in-out; 
 }
-
-/* Hace el formulario visible y clickeable cuando JS aplica display: block */
 #contenedor-formulario[style*="display: block"] {
     opacity: 1 !important;
     pointer-events: auto !important;
 }
-
 .screen-shutdown-effect {
     animation: crt-shutdown 0.6s ease-in forwards; 
     background-color: black; 
@@ -267,7 +253,6 @@ label, .instrucciones {
 .input-terminal {
     width: 100%;
     padding: 10px;
-    /* Aseguramos que el input tenga un fondo para que el texto sea legible */
     background-color: rgba(0, 0, 0, 0.7); 
     border: 1px solid var(--text-color);
     color: var(--text-color);
@@ -276,18 +261,15 @@ label, .instrucciones {
     box-sizing: border-box; 
     transition: all 0.2s;
 }
-
 .input-terminal:focus {
     outline: none;
     border-color: var(--error-color);
     box-shadow: 0 0 5px var(--error-color);
 }
-
 textarea.input-terminal {
     min-height: 250px; 
     height: 250px;
 }
-
 #cronometro-display {
     font-size: 3em;
     text-align: center;
@@ -295,7 +277,6 @@ textarea.input-terminal {
     margin: 20px 0;
     animation: blink 0.5s step-end infinite;
 }
-
 .timer-expired {
     color: var(--error-color) !important;
     font-size: 3.5em !important;
@@ -315,13 +296,11 @@ textarea.input-terminal {
     font-family: var(--font-family);
     border: 2px solid var(--text-color);
 }
-
 .btn-terminal:hover {
     background-color: var(--bg-color);
     color: var(--text-color);
     box-shadow: 0 0 10px var(--text-color);
 }
-
 .btn-terminal:disabled {
     background-color: var(--bg-color);
     color: var(--error-color);
@@ -350,7 +329,6 @@ textarea.input-terminal {
     flex-direction: column; 
     box-sizing: border-box; 
 }
-
 #reconnect-btn {
     background-color: var(--error-color);
     color: var(--bg-color);
@@ -362,261 +340,63 @@ textarea.input-terminal {
     transition: all 0.3s;
     font-family: var(--font-family);
 }
-
 #reconnect-btn:hover {
     background-color: var(--bg-color);
     color: var(--error-color);
     box-shadow: 0 0 10px var(--error-color);
 }
+
+
 /* --- ESTILOS DE VISTA DE ADMINISTRADOR (admin.html) --- */
 
 /* Adaptabilidad y Estructura del Layout */
 #admin-container {
-    width: 95%; /* Más ancho para aprovechar espacio */
+    width: 95%; 
     max-width: 1400px;
     margin: 40px auto;
     padding: 20px;
-    /* Usa los estilos de terminal definidos en style.css */
     border: 2px solid var(--text-color);
-    box-shadow: 0 0 5px var(--text-color);
-    background-color: transparent; /* Fondo transparente para ver la imagen de fondo */
-    animation: ghostly-pulse 5s infinite ease-in-out; /* Animación de terminal */
+    box-sizing: border-box; 
+    background-color: transparent; 
+    /* Aplicar el pulso y el nuevo glitch eléctrico */
+    animation: ghostly-pulse 5s infinite ease-in-out, electrical-glitch-border 0.5s infinite alternate; 
 }
 
-#data-panels {
-    display: flex;
-    gap: 20px;
-    flex-wrap: wrap; 
+/* Legibilidad y estilo dramático para la Advertencia */
+#advertencia-admin {
+    color: var(--error-color) !important;
+    font-size: 1.5em !important;
+    text-align: center;
+    padding: 10px;
+    border: 1px dashed var(--error-color);
+    background-color: rgba(255, 0, 76, 0.1); 
+    margin: 20px 0;
+    text-transform: uppercase;
+    animation: blink 2s step-end infinite;
 }
 
-/* Estilo de los Paneles (Lista y Detalle) */
+/* Forzar mayúsculas en los títulos y etiquetas */
+#registros-encontrados-titulo, 
+#nombre-escritor-label {
+    text-transform: uppercase;
+}
+
+/* Estilo del texto inicial de la Historia (Legibilidad mejorada) */
+#estado-desencriptacion {
+    color: var(--neon-blue) !important; 
+    font-size: 1.2em;
+    text-align: center;
+    padding: 20px;
+    border: 1px solid var(--text-color);
+}
+
+/* Estilo para los paneles (ajustado para mejor contraste) */
 #lista-nombres-panel, #historia-detalle-panel {
     padding: 15px;
-    background-color: rgba(0, 0, 0, 0.8); /* Fondo oscuro semitransparente para legibilidad */
+    background-color: rgba(0, 0, 0, 0.9); /* Más oscuro para mejor contraste */
     min-height: 500px;
     box-sizing: border-box;
     overflow-y: auto;
-    border: 1px solid var(--neon-blue); /* Borde neón */
-    box-shadow: 0 0 10px rgba(0, 224, 255, 0.5); /* Sombra neón */
-}
-
-#lista-nombres-panel {
-    flex: 1; 
-    min-width: 300px; 
-    max-width: 400px; /* Limita el ancho de la lista */
-}
-
-#historia-detalle-panel {
-    flex: 3; /* Ocupa la mayor parte del espacio */
-    min-width: 400px;
-}
-
-/* Estilo de la Lista de Nombres */
-#nombres-lista {
-    margin-top: 10px;
-}
-.nombre-registro {
-    padding: 8px 5px;
-    border-bottom: 1px dashed rgba(255, 0, 76, 0.4); /* Línea de error como separador */
-    cursor: pointer;
-    transition: background-color 0.2s, color 0.2s;
-    font-size: 1.1em;
-    word-break: break-word; /* Evita que nombres largos desborden */
-}
-.nombre-registro:hover {
-    background-color: rgba(0, 255, 65, 0.15);
-    color: var(--neon-blue);
-}
-.nombre-registro.selected {
-     background-color: var(--text-color); /* Fondo verde de terminal */
-     color: var(--bg-color); /* Texto negro */
-     box-shadow: 0 0 15px var(--text-color);
-}
-
-/* Estilo de la Historia (Modo Presentación de Texto Encriptado) */
-#historia-contenido {
-    white-space: pre-wrap; /* Mantiene el formato (saltos de línea) del texto original */
-    font-style: italic;
-    border-left: 5px solid var(--error-color); /* Borde de atención rojo/error */
-    padding-left: 20px;
-    margin-top: 20px;
-    min-height: 250px;
-    color: var(--text-color); /* Color por defecto, será cambiado por JS para el efecto */
-    overflow-wrap: break-word; /* Rompe palabras largas si es necesario */
-}
-
-/* Adaptabilidad para Móviles */
-@media (max-width: 768px) {
-    #data-panels {
-        flex-direction: column;
-    }
-    #lista-nombres-panel, #historia-detalle-panel {
-        min-width: 100%;
-        max-width: 100%;
-    }
-    #admin-container {
-        padding: 10px;
-    }
-}
-/* --- NUEVA ANIMACIÓN: CORTOCIRCUITO ELÉCTRICO --- */
-@keyframes electrical-glitch-border {
-    0% { box-shadow: 0 0 10px var(--text-color), 0 0 0 2px var(--text-color); }
-    5% { box-shadow: 0 0 15px var(--error-color), 0 0 0 3px var(--neon-blue); }
-    10% { box-shadow: 0 0 10px var(--neon-blue), 0 0 0 2px var(--error-color); }
-    12% { box-shadow: 0 0 10px var(--text-color); }
-    30% { box-shadow: 0 0 10px var(--text-color), 0 0 0 2px var(--text-color); }
-    40% { box-shadow: 0 0 15px var(--text-color), 0 0 0 2px var(--error-color); }
-    45% { box-shadow: 0 0 10px var(--neon-blue); }
-    100% { box-shadow: 0 0 10px var(--text-color), 0 0 0 2px var(--text-color); }
-}
-
-
-/* --- ESTILOS DE VISTA DE ADMINISTRADOR (admin.html) --- */
-
-#admin-container {
-    width: 95%; 
-    max-width: 1400px;
-    margin: 40px auto;
-    padding: 20px;
-    border: 2px solid var(--text-color);
-    /* Aplicar el glitch eléctrico al contenedor principal */
-    animation: ghostly-pulse 5s infinite ease-in-out, electrical-glitch-border 0.5s infinite alternate; 
-    background-color: transparent; 
-    box-sizing: border-box; 
-}
-
-/* Legibilidad y estilo dramático para la Advertencia */
-#advertencia-admin {
-    color: var(--error-color) !important;
-    font-size: 1.5em !important;
-    text-align: center;
-    padding: 10px;
-    border: 1px dashed var(--error-color);
-    background-color: rgba(255, 0, 76, 0.1); /* Fondo sutil de error */
-    margin: 20px 0;
-    text-transform: uppercase;
-    animation: blink 2s step-end infinite;
-}
-
-/* Forzar mayúsculas en el título de los registros */
-#registros-encontrados-titulo {
-    text-transform: uppercase;
-}
-
-/* Forzar mayúsculas en el título del nombre del escritor */
-#nombre-escritor-label {
-    text-transform: uppercase;
-}
-
-/* Estilo del texto inicial de la Historia (Legibilidad mejorada) */
-#estado-desencriptacion {
-    color: var(--neon-blue) !important; /* Color más legible que el error */
-    font-size: 1.2em;
-    text-align: center;
-    padding: 20px;
-    border: 1px solid var(--text-color);
-}
-
-/* Estilo para los paneles (ajustado para mejor contraste) */
-#lista-nombres-panel, #historia-detalle-panel {
-    background-color: rgba(0, 0, 0, 0.9); /* Más oscuro para mejor contraste */
-    min-height: 500px;
-    border: 1px solid var(--neon-blue);
-    box-shadow: 0 0 10px rgba(0, 224, 255, 0.5);
-}
-
-/* Estilos de layout de data-panels (si no existen) */
-#data-panels {
-    display: flex;
-    gap: 20px;
-    flex-wrap: wrap; 
-}
-#lista-nombres-panel {
-    flex: 1; 
-    min-width: 300px; 
-    max-width: 400px; 
-}
-#historia-detalle-panel {
-    flex: 3; 
-    min-width: 400px;
-}
-
-/* Adaptabilidad para Móviles */
-@media (max-width: 768px) {
-    #data-panels {
-        flex-direction: column;
-    }
-    #lista-nombres-panel, #historia-detalle-panel {
-        min-width: 100%;
-        max-width: 100%;
-    }
-    #admin-container {
-        padding: 10px;
-    }
-}
-/* --- NUEVA ANIMACIÓN: CORTOCIRCUITO ELÉCTRICO --- */
-@keyframes electrical-glitch-border {
-    0% { box-shadow: 0 0 10px var(--text-color), 0 0 0 2px var(--text-color); }
-    5% { box-shadow: 0 0 15px var(--error-color), 0 0 0 3px var(--neon-blue); }
-    10% { box-shadow: 0 0 10px var(--neon-blue), 0 0 0 2px var(--error-color); }
-    12% { box-shadow: 0 0 10px var(--text-color); }
-    30% { box-shadow: 0 0 10px var(--text-color), 0 0 0 2px var(--text-color); }
-    40% { box-shadow: 0 0 15px var(--text-color), 0 0 0 2px var(--error-color); }
-    45% { box-shadow: 0 0 10px var(--neon-blue); }
-    100% { box-shadow: 0 0 10px var(--text-color), 0 0 0 2px var(--text-color); }
-}
-
-
-/* --- ESTILOS DE VISTA DE ADMINISTRADOR (admin.html) --- */
-
-#admin-container {
-    width: 95%; 
-    max-width: 1400px;
-    margin: 40px auto;
-    padding: 20px;
-    border: 2px solid var(--text-color);
-    /* Aplicar el glitch eléctrico al contenedor principal */
-    animation: ghostly-pulse 5s infinite ease-in-out, electrical-glitch-border 0.5s infinite alternate; 
-    background-color: transparent; 
-    box-sizing: border-box; 
-}
-
-/* Legibilidad y estilo dramático para la Advertencia */
-#advertencia-admin {
-    color: var(--error-color) !important;
-    font-size: 1.5em !important;
-    text-align: center;
-    padding: 10px;
-    border: 1px dashed var(--error-color);
-    background-color: rgba(255, 0, 76, 0.1); /* Fondo sutil de error */
-    margin: 20px 0;
-    text-transform: uppercase;
-    animation: blink 2s step-end infinite;
-}
-
-/* Forzar mayúsculas en el título de los registros */
-#registros-encontrados-titulo {
-    text-transform: uppercase;
-}
-
-/* Forzar mayúsculas en el título del nombre del escritor */
-#nombre-escritor-label {
-    text-transform: uppercase;
-}
-
-/* Estilo del texto inicial de la Historia (Legibilidad mejorada) */
-#estado-desencriptacion {
-    color: var(--neon-blue) !important; /* Color más legible que el error */
-    font-size: 1.2em;
-    text-align: center;
-    padding: 20px;
-    border: 1px solid var(--text-color);
-}
-
-/* Estilo para los paneles (ajustado para mejor contraste) */
-#lista-nombres-panel, #historia-detalle-panel {
-    background-color: rgba(0, 0, 0, 0.9); /* Más oscuro para mejor contraste */
-    min-height: 500px;
     border: 1px solid var(--neon-blue);
     box-shadow: 0 0 10px rgba(0, 224, 255, 0.5);
 }
@@ -636,6 +416,11 @@ textarea.input-terminal {
     flex: 3; 
     min-width: 400px;
 }
+
+/* Estilo de la Lista de Nombres */
+#nombres-lista {
+    margin-top: 10px;
+}
 .nombre-registro {
     padding: 8px 5px;
     border-bottom: 1px dashed rgba(255, 0, 76, 0.4); 
@@ -652,6 +437,18 @@ textarea.input-terminal {
      background-color: var(--text-color); 
      color: var(--bg-color); 
      box-shadow: 0 0 15px var(--text-color);
+}
+
+/* Estilo de la Historia (Modo Presentación de Texto Encriptado) */
+#historia-contenido {
+    white-space: pre-wrap;
+    font-style: italic;
+    border-left: 5px solid var(--error-color); 
+    padding-left: 20px;
+    margin-top: 20px;
+    min-height: 250px;
+    color: var(--text-color); 
+    overflow-wrap: break-word; 
 }
 
 /* Adaptabilidad para Móviles */
