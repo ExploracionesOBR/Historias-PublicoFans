@@ -458,3 +458,99 @@ textarea.input-terminal {
         padding: 10px;
     }
 }
+/* --- NUEVA ANIMACIÓN: CORTOCIRCUITO ELÉCTRICO --- */
+@keyframes electrical-glitch-border {
+    0% { box-shadow: 0 0 10px var(--text-color), 0 0 0 2px var(--text-color); }
+    5% { box-shadow: 0 0 15px var(--error-color), 0 0 0 3px var(--neon-blue); }
+    10% { box-shadow: 0 0 10px var(--neon-blue), 0 0 0 2px var(--error-color); }
+    12% { box-shadow: 0 0 10px var(--text-color); }
+    30% { box-shadow: 0 0 10px var(--text-color), 0 0 0 2px var(--text-color); }
+    40% { box-shadow: 0 0 15px var(--text-color), 0 0 0 2px var(--error-color); }
+    45% { box-shadow: 0 0 10px var(--neon-blue); }
+    100% { box-shadow: 0 0 10px var(--text-color), 0 0 0 2px var(--text-color); }
+}
+
+
+/* --- ESTILOS DE VISTA DE ADMINISTRADOR (admin.html) --- */
+
+#admin-container {
+    width: 95%; 
+    max-width: 1400px;
+    margin: 40px auto;
+    padding: 20px;
+    border: 2px solid var(--text-color);
+    /* Aplicar el glitch eléctrico al contenedor principal */
+    animation: ghostly-pulse 5s infinite ease-in-out, electrical-glitch-border 0.5s infinite alternate; 
+    background-color: transparent; 
+    box-sizing: border-box; 
+}
+
+/* Legibilidad y estilo dramático para la Advertencia */
+#advertencia-admin {
+    color: var(--error-color) !important;
+    font-size: 1.5em !important;
+    text-align: center;
+    padding: 10px;
+    border: 1px dashed var(--error-color);
+    background-color: rgba(255, 0, 76, 0.1); /* Fondo sutil de error */
+    margin: 20px 0;
+    text-transform: uppercase;
+    animation: blink 2s step-end infinite;
+}
+
+/* Forzar mayúsculas en el título de los registros */
+#registros-encontrados-titulo {
+    text-transform: uppercase;
+}
+
+/* Forzar mayúsculas en el título del nombre del escritor */
+#nombre-escritor-label {
+    text-transform: uppercase;
+}
+
+/* Estilo del texto inicial de la Historia (Legibilidad mejorada) */
+#estado-desencriptacion {
+    color: var(--neon-blue) !important; /* Color más legible que el error */
+    font-size: 1.2em;
+    text-align: center;
+    padding: 20px;
+    border: 1px solid var(--text-color);
+}
+
+/* Estilo para los paneles (ajustado para mejor contraste) */
+#lista-nombres-panel, #historia-detalle-panel {
+    background-color: rgba(0, 0, 0, 0.9); /* Más oscuro para mejor contraste */
+    min-height: 500px;
+    border: 1px solid var(--neon-blue);
+    box-shadow: 0 0 10px rgba(0, 224, 255, 0.5);
+}
+
+/* Estilos de layout de data-panels (si no existen) */
+#data-panels {
+    display: flex;
+    gap: 20px;
+    flex-wrap: wrap; 
+}
+#lista-nombres-panel {
+    flex: 1; 
+    min-width: 300px; 
+    max-width: 400px; 
+}
+#historia-detalle-panel {
+    flex: 3; 
+    min-width: 400px;
+}
+
+/* Adaptabilidad para Móviles */
+@media (max-width: 768px) {
+    #data-panels {
+        flex-direction: column;
+    }
+    #lista-nombres-panel, #historia-detalle-panel {
+        min-width: 100%;
+        max-width: 100%;
+    }
+    #admin-container {
+        padding: 10px;
+    }
+}
