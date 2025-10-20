@@ -90,50 +90,42 @@
     }
 }
 
-/* --- NUEVA ANIMACIÓN: RAYOS ELÉCTRICOS HACIA LOS LADOS --- */
+/* --- ANIMACIÓN AJUSTADA: RAYOS ELÉCTRICOS SUTILES --- */
 @keyframes ray-glitch-animation {
     0%, 100% { 
-        box-shadow: 
-            0 0 15px var(--neon-blue),
-            0 0 0 0 rgba(0, 224, 255, 0); /* Base */
+        box-shadow: 0 0 5px rgba(0, 255, 65, 0.5); 
     }
     5% { 
         box-shadow: 
-            0 0 20px var(--error-color),
-            -200px 0 0 8px var(--error-color), /* Rayo Izquierda */
-            200px 0 0 8px var(--error-color); /* Rayo Derecha */
+            0 0 10px rgba(255, 0, 76, 0.7),
+            -150px 0 0 1px rgba(255, 0, 76, 0.4), /* Rayo Izquierda sutil */
+            150px 0 0 1px rgba(255, 0, 76, 0.4); /* Rayo Derecha sutil */
     }
     10% { 
         box-shadow: 
-            0 0 15px var(--text-color),
-            -150px 0 0 5px var(--neon-blue),
-            150px 0 0 5px var(--neon-blue); 
+            0 0 10px rgba(0, 224, 255, 0.7),
+            -100px 0 0 1px rgba(0, 224, 255, 0.2),
+            100px 0 0 1px rgba(0, 224, 255, 0.2); 
     }
     15% {
-         box-shadow: 
-            0 0 15px var(--neon-blue),
-            0 0 0 0 rgba(0, 224, 255, 0);
+         box-shadow: 0 0 5px rgba(0, 255, 65, 0.5);
     }
     18% { 
         box-shadow: 
-            0 0 30px var(--text-color),
-            -350px 0 0 10px var(--text-color), /* Rayo Largo y dramático */
-            350px 0 0 10px var(--text-color);
+            0 0 15px rgba(0, 255, 65, 0.8),
+            -250px 0 0 2px rgba(0, 255, 65, 0.3), /* Rayo Largo y sutil */
+            250px 0 0 2px rgba(0, 255, 65, 0.3);
     }
     20% { 
-        box-shadow: 
-            0 0 15px var(--neon-blue),
-            0 0 0 0 rgba(0, 224, 255, 0);
+        box-shadow: 0 0 5px rgba(0, 255, 65, 0.5);
     }
     100% {
-        box-shadow: 
-            0 0 15px var(--neon-blue),
-            0 0 0 0 rgba(0, 224, 255, 0);
+        box-shadow: 0 0 5px rgba(0, 255, 65, 0.5);
     }
 }
 
 
-/* * CUERPO Y FONDO (Actualizado a fondo oscuro sólido) */
+/* * CUERPO Y FONDO */
 body {
     background-color: var(--spooky-dark);
     color: var(--text-color);
@@ -146,12 +138,10 @@ body {
     padding: 20px 10px; 
     overflow-y: auto; 
     position: relative; 
-    /* Fondo limpio y oscuro */
     background-image: none; 
     background-attachment: scroll; 
 }
 
-/* Asegura que el fondo negro cubra todo y elimina la opacidad de la imagen */
 body::before {
     content: "";
     position: fixed; 
@@ -382,11 +372,10 @@ textarea.input-terminal {
     border: 2px solid var(--text-color);
     box-sizing: border-box; 
     background-color: transparent; 
-    /* **APLICACIÓN DE LA ANIMACIÓN DE RAYOS Y PULSO** */
+    /* Aplicación de la animación de rayos sutiles */
     animation: ghostly-pulse 5s infinite ease-in-out, ray-glitch-animation 1s infinite alternate; 
 }
 
-/* MENSAJE DE ADVERTENCIA REDUCIDO */
 #advertencia-admin {
     color: var(--error-color) !important;
     font-size: 1.2em !important; 
@@ -400,12 +389,27 @@ textarea.input-terminal {
 }
 
 /* Forzar mayúsculas en los títulos y etiquetas */
-#registros-encontrados-titulo, 
-#historia-label {
+#registros-encontrados-titulo {
     text-transform: uppercase;
 }
 
-/* Estilo del texto inicial de la Historia (Legibilidad mejorada) */
+/* **AJUSTE 2: TÍTULO DEL DETALLE MÁS PEQUEÑO** */
+#detalle-titulo {
+    font-size: 1.5em; /* Reducción de 2.5em a 1.5em */
+    text-align: left; /* Mantener la alineación para el borde inferior */
+    color: var(--error-color);
+    border-bottom: 3px solid var(--error-color);
+    padding-bottom: 5px;
+    margin-bottom: 20px;
+}
+
+/* **AJUSTE 3: ETIQUETA DE HISTORIA CENTRADA** */
+#historia-label {
+    text-transform: uppercase;
+    text-align: center;
+}
+
+
 #estado-desencriptacion {
     color: var(--neon-blue) !important; 
     font-size: 1.2em;
@@ -414,7 +418,12 @@ textarea.input-terminal {
     border: 1px solid var(--text-color);
 }
 
-/* Estilo para los paneles (ajustado para mejor contraste) */
+/* **AJUSTE 4: UNIR LOS CUADROS (REDUCIR GAP)** */
+#data-panels {
+    display: flex;
+    gap: 5px; /* Reducción de 20px a 5px */
+    flex-wrap: wrap; 
+}
 #lista-nombres-panel, #historia-detalle-panel {
     padding: 15px;
     background-color: rgba(0, 0, 0, 0.9);
@@ -434,12 +443,7 @@ textarea.input-terminal {
     background-attachment: local;
 }
 
-/* Estilos de layout de data-panels */
-#data-panels {
-    display: flex;
-    gap: 20px;
-    flex-wrap: wrap; 
-}
+/* Dimensiones de los paneles */
 #lista-nombres-panel {
     flex: 1; 
     min-width: 300px; 
@@ -450,7 +454,7 @@ textarea.input-terminal {
     min-width: 400px;
 }
 
-/* Aumento de Tamaño de Texto en la Lista */
+/* Lista de Nombres */
 .nombre-registro {
     padding: 8px 5px;
     border-bottom: 1px dashed rgba(255, 0, 76, 0.4); 
@@ -469,7 +473,7 @@ textarea.input-terminal {
      box-shadow: 0 0 15px var(--text-color);
 }
 
-/* Estilo de la Historia (Modo Presentación de Texto Encriptado) */
+/* Contenido de la Historia */
 #historia-contenido {
     white-space: pre-wrap;
     font-style: italic;
@@ -486,6 +490,7 @@ textarea.input-terminal {
 @media (max-width: 768px) {
     #data-panels {
         flex-direction: column;
+        gap: 20px; /* Separación estándar en móvil */
     }
     #lista-nombres-panel, #historia-detalle-panel {
         min-width: 100%;
