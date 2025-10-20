@@ -143,6 +143,12 @@ function iniciarAnimacionLogo() {
     }
     
     setTimeout(() => {
+        // ** [NUEVO] REPRODUCIR AUDIO DESPUÉS DEL LOGO **
+        const audio = new Audio('llanto_llorona.mp3');
+        audio.volume = 0.5; 
+        // Nota: Esta reproducción puede fallar si el navegador requiere interacción previa.
+        audio.play().catch(e => console.warn("Advertencia: No se pudo reproducir el audio 'llanto_llorona.mp3' en la carga inicial.", e));
+        
         if (logoEntrada) logoEntrada.style.display = 'none'; 
         iniciarAperturaEspiral();
     }, 3000); 
@@ -302,10 +308,15 @@ function mostrarListaNombres(registros) {
 }
 
 /**
- * Muestra el detalle de la Historia seleccionada (con efecto de máquina de escribir).
+ * Muestra el detalle de la Historia seleccionada (con efecto de máquina de escribir) y reproduce audio.
  */
 function seleccionarRegistro(registro, elementoClicado) {
     if (!historiaContenido || !detalleTitulo) return;
+    
+    // ** AJUSTE: Reproducir audio al hacer clic **
+    const audio = new Audio('llanto_llorona.mp3');
+    audio.volume = 0.5; // Ajuste de volumen
+    audio.play().catch(e => console.warn("Advertencia: No se pudo reproducir el audio 'llanto_llorona.mp3'. El navegador puede requerir interacción del usuario primero.", e));
     
     // DETENER animación anterior (CORRECCIÓN DOBLE CLIC)
     if (currentTypingInterval) {
@@ -318,10 +329,10 @@ function seleccionarRegistro(registro, elementoClicado) {
     // Añadir la clase 'selected' al elemento clickeado
     elementoClicado.classList.add('selected');
 
-    // Usar innerHTML para diferenciar color de "TESTIMONIO DE"
+    // Formato del título
     const nombreEnMayusculas = registro.Nombre.toUpperCase();
-    const tituloEstatico = `<span style="color: var(--neon-blue);">TESTIMONIO DE </span>`; // Color diferente
-    detalleTitulo.innerHTML = `>>> [ ${tituloEstatico}${nombreEnMayusculas} ] <<<`;
+    const tituloEstatico = `<span style="color: var(--neon-blue);">TESTIMONIO DE </span>`; 
+    detalleTitulo.innerHTML = `[ ${tituloEstatico}${nombreEnMayusculas} ]`; // Nuevo formato
     
     // Simulación de escritura (efecto máquina de escribir)
     historiaContenido.textContent = '';
